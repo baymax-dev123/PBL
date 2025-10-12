@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <title>login</title> 
+  <style>
+    /* Reset and base styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #7f3368, #1d5ca3, violet);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+    }
+    
+    /* Animated background elements */
+    .bg-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+    
+    .bubble {
+        position: absolute;
+        border-radius: 50%;
+        
+        animation: float 15s infinite ease-in-out;
+    }
+    
+    .bubble:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+        background: rgba(46, 204, 113, 0.1);
+    }
+    
+    .bubble:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        top: 70%;
+        left: 80%;
+        animation-delay: 2s;
+        background: rgba(46, 204, 113, 0.1);
+    }
+    
+    .bubble:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        top: 40%;
+        left: 85%;
+        animation-delay: 4s;
+        background: rgba(46, 204, 113, 0.1);
+    }
+    
+    .bubble:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        top: 80%;
+        left: 15%;
+        animation-delay: 6s;
+        background: rgba(209, 214, 211, 0.1);
+    }
+    
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        33% {
+            transform: translateY(-30px) rotate(120deg);
+        }
+        66% {
+            transform: translateY(20px) rotate(240deg);
+        }
+    }
+    
+    /* Header styles */
+    header {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 1.5rem 1rem;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.2), transparent);
+        animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+        0% {
+            left: -100%;
+        }
+        100% {
+            left: 100%;
+        }
+    }
+    
+    header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2ecc71, #1abc9c, #3498db);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: 1px;
+        position: relative;
+    }
+    
+    /* Main content */
+    main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 1rem;
+    }
+    
+    /* Container for both forms */
+    .form-container {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        height: 600px;
+        overflow: hidden;
+    }
+    
+    /* Forms wrapper */
+    .forms-wrapper {
+        position: relative;
+        width: 200%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.6s ease-in-out;
+    }
+    
+    .forms-wrapper.slide-right {
+        transform: translateX(-50%);
+    }
+    
+    /* Individual forms */
+    .form {
+        width: 50%;
+        padding: 0 1rem;
+    }
+    
+    /* Login box */
+    .loginbox, .registerbox {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        overflow-y: auto;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .loginbox:hover, .registerbox:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    
+    .loginbox::before, .registerbox::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #2ecc71, #1abc9c, #3498db);
+    }
+    
+    .health-icon {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 3rem;
+        color: #2ecc71;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+    
+    .details {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+    
+    /* Input fields */
+    .input-group {
+        position: relative;
+        width: 100%;
+    }
+    
+    .input-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #2ecc71;
+        font-size: 1.2rem;
+        z-index: 1;
+        transition: color 0.3s ease;
+    }
+    
+    .input-group input, .input-group select {
+        width: 100%;
+        padding: 15px 15px 15px 50px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .input-group input:focus, .input-group select:focus {
+        outline: none;
+        border-color: #2ecc71;
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3);
+    }
+    
+    .input-group input:focus + i, .input-group select:focus + i {
+        color: #1abc9c;
+    }
+    
+    .input-group input::placeholder, .input-group select::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Button styles */
+    .button-group {
+        margin-top: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .button-group button {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2ecc71, #1abc9c);
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .button-group button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .button-group button:hover::before {
+        left: 100%;
+    }
+    
+    .button-group button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(46, 204, 113, 0.6);
+    }
+    
+    .button-group button:active {
+        transform: translateY(-1px);
+    }
+    
+    /* Switch form links */
+    .switch-form {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .switch-form p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0.5rem;
+    }
+    
+    .switch-form a {
+        color: #2ecc71;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+    
+    .switch-form a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #2ecc71;
+        transition: width 0.3s ease;
+    }
+    
+    .switch-form a:hover {
+        color: #1abc9c;
+    }
+    
+    .switch-form a:hover::after {
+        width: 100%;
+    }
+    
+    /* Forgot password */
+    .forgot-password {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .forgot-password a {
+        color: #2ecc71;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+    
+    .forgot-password a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: #2ecc71;
+        transition: width 0.3s ease;
+    }
+    
+    .forgot-password a:hover {
+        color: #1abc9c;
+    }
+    
+    .forgot-password a:hover::after {
+        width: 100%;
+    }
+    
+    /* Alert styles */
+    .alert {
+        display: none;
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        animation: shake 0.5s ease;
+        box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    /* Success message */
+    .success {
+        display: none;
+        background: rgba(46, 204, 113, 0.9);
+        color: white;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        header h1 {
+            font-size: 2.2rem;
+        }
+        
+        .loginbox, .registerbox {
+            padding: 2rem 1.5rem;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 14px 14px 14px 45px;
+        }
+        
+        .health-icon {
+            font-size: 2.5rem;
+        }
+        
+        .form-container {
+            height: 650px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        body {
+            padding: 0;
+        }
+        
+        header {
+            padding: 1.2rem 1rem;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+        }
+        
+        main {
+            padding: 1.5rem 1rem;
+        }
+        
+        .loginbox, .registerbox {
+            padding: 1.8rem 1.2rem;
+            border-radius: 15px;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 12px 12px 12px 40px;
+            font-size: 0.95rem;
+        }
+        
+        .input-group i {
+            font-size: 1.1rem;
+            left: 12px;
+        }
+        
+        .button-group button {
+            padding: 14px;
+            font-size: 1rem;
+        }
+        
+        .health-icon {
+            font-size: 2rem;
+        }
+        
+        .form-container {
+            height: 700px;
+        }
+    }
+  </style>
+</head>
+<body>
+    <!-- Animated background elements -->
+    <div class="bg-elements">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    
+    <header>
+        <h1>HEALTH CARE</h1>
+    </header>
+    <main>
+        <div class="form-container">
+            <div class="forms-wrapper" id="forms-wrapper">
+                <!-- Login Form -->
+                <div class="form">
+                    <div class="loginbox">
+                        <!-- Health Icon -->
+                        <div class="health-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        
+                        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2ecc71;">Login to Your Account</h2>
+                        
+                        <!-- Alert Messages -->
+                        <div class="alert" id="login-alert">
+                            Please fill in all fields correctly!
+                        </div>
+                        
+                        <div class="success" id="login-success">
+                            Login successful! Redirecting...
+                        </div>
+                        
+                        <form id="loginForm" class="details">
+                            <div class="input-group">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" placeholder="Username" id="username" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" placeholder="Password" id="password" required>
+                            </div>
+                            <div class="button-group">
+                                <button type="submit">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                    <span>Login</span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="forgot-password">
+                            <a href="#">Forgot Password?</a>
+                        </div>
+                        
+                        <div class="switch-form">
+                            <p>Don't have an account?</p>
+                            <a href="#" id="show-register">Create Account</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Registration Form -->
+                <div class="form">
+                    <div class="registerbox">
+                        <!-- Health Icon -->
+                        <div class="health-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        
+                        <h2 style="text-align: center; margin-bottom: 1.5rem; color: #2ecc71;">Create New Account</h2>
+                        
+                        <!-- Alert Messages -->
+                        <div class="alert" id="register-alert">
+                            Please fill in all fields correctly!
+                        </div>
+                        
+                        <div class="success" id="register-success">
+                            Account created successfully! Redirecting...
+                        </div>
+                        
+                        <form id="registerForm" class="details">
+                            <div class="input-group">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" placeholder="Full Name" id="fullname" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-phone"></i>
+                                <input type="tel" placeholder="Phone Number" id="phone" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <input type="text" placeholder="Location" id="location" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" placeholder="Email Address" id="email" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" placeholder="Password" id="reg-password" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" placeholder="Confirm Password" id="confirm-password" required>
+                            </div>
+                            <div class="button-group">
+                                <button type="submit">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    <span>Create Account</span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="switch-form">
+                            <p>Already have an account?</p>
+                            <a href="#" id="show-login">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form switching functionality
+        document.getElementById('show-register').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forms-wrapper').classList.add('slide-right');
+        });
+        
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forms-wrapper').classList.remove('slide-right');
+        });
+        
+        // Login form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const alertMessage = document.getElementById('login-alert');
+            const successMessage = document.getElementById('login-success');
+            
+            // Hide previous messages
+            alertMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validation
+            if (username === '' || password === '') {
+                alertMessage.textContent = 'Please fill in all fields!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (username.length < 3) {
+                alertMessage.textContent = 'Username must be at least 3 characters long!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                alertMessage.textContent = 'Password must be at least 6 characters long!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            // If validation passes
+            successMessage.style.display = 'block';
+            
+            // Simulate login process and redirect
+            setTimeout(function() {
+                window.location.href = '_1.2.html';
+            }, 1500);
+        });
+        
+        // Registration form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullname = document.getElementById('fullname').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const location = document.getElementById('location').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const alertMessage = document.getElementById('register-alert');
+            const successMessage = document.getElementById('register-success');
+            
+            // Hide previous messages
+            alertMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validation
+            if (fullname === '' || phone === '' || location === '' || email === '' || password === '' || confirmPassword === '') {
+                alertMessage.textContent = 'Please fill in all fields!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (fullname.length < 3) {
+                alertMessage.textContent = 'Full name must be at least 3 characters long!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (phone.length < 10) {
+                alertMessage.textContent = 'Please enter a valid phone number!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                alertMessage.textContent = 'Password must be at least 6 characters long!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alertMessage.textContent = 'Passwords do not match!';
+                alertMessage.style.display = 'block';
+                return;
+            }
+            
+            // If validation passes
+            successMessage.style.display = 'block';
+            
+            // Simulate registration process and redirect
+            setTimeout(function() {
+                window.location.href = '_1.2.html';
+            }, 1500);
+        });
+        
+        // Add input validation as user types
+        document.getElementById('username').addEventListener('input', function() {
+            if (this.value.length >= 3) {
+                this.style.borderColor = '#2ecc71';
+            } else {
+                this.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+            }
+        });
+        
+        document.getElementById('password').addEventListener('input', function() {
+            if (this.value.length >= 6) {
+                this.style.borderColor = '#2ecc71';
+            } else {
+                this.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+            }
+        });
+        
+        document.getElementById('reg-password').addEventListener('input', function() {
+            const confirmPassword = document.getElementById('confirm-password');
+            if (this.value.length >= 6) {
+                this.style.borderColor = '#2ecc71';
+            } else {
+                this.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+            }
+            
+            // Check if passwords match
+            if (confirmPassword.value !== '' && this.value !== confirmPassword.value) {
+                confirmPassword.style.borderColor = '#e74c3c';
+            } else if (confirmPassword.value !== '') {
+                confirmPassword.style.borderColor = '#2ecc71';
+            }
+        });
+        
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('reg-password').value;
+            if (this.value === password && password.length >= 6) {
+                this.style.borderColor = '#2ecc71';
+            } else {
+                this.style.borderColor = '#e74c3c';
+            }
+        });
+    </script>
+</body>
+</html>

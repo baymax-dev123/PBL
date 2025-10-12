@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f1b2e;
+        }
+        
+        .welcome-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.8s;
+            opacity: 0;
+            z-index: -1;
+            filter: brightness(0.7) contrast(0.85) saturate(0.75);
+        }
+        
+        .background-image.active {
+            opacity: 1;
+        }
+        
+        .welcome-text {
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            max-width: 80%;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-text h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .welcome-text p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .language-name {
+            display: none;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffcc00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .progress-container {
+            width: 300px;
+            margin: 20px auto;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 4px;
+        }
+        
+        .auto-redirect-message {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .auto-redirect-message.visible {
+            opacity: 1;
+        }
+        
+        .welcome-button {
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            color: #0f1b2e;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            margin-top: 20px;
+        }
+        
+        .welcome-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .welcome-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.6);
+        }
+        
+        /* Language-specific font adjustments */
+        .hindi {
+            font-family: 'Nirmala UI', 'Arial Unicode MS', sans-serif;
+        }
+        
+        .kannada {
+            font-family: 'Tunga', 'Kedage', sans-serif;
+        }
+        
+        .tamil {
+            font-family: 'Latha', 'Vijaya', sans-serif;
+        }
+        
+        .telugu {
+            font-family: 'Gautami', 'Vani', sans-serif;
+        }
+        
+        .malayalam {
+            font-family: 'Kartika', 'Rachana', sans-serif;
+        }
+        
+        .bengali {
+            font-family: 'Vrinda', 'SolaimanLipi', sans-serif;
+        }
+        
+        .gujarati {
+            font-family: 'Shruti', 'Saras', sans-serif;
+            color: #0f1b2e;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .welcome-text h1 {
+                font-size: 3rem;
+            }
+            
+            .welcome-text p {
+                font-size: 1.2rem;
+            }
+            
+            .language-name {
+                font-size: 1.4rem;
+            }
+            
+            .progress-container {
+                width: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .welcome-text h1 {
+                font-size: 2.2rem;
+            }
+            
+            .welcome-text p {
+                font-size: 1rem;
+            }
+            
+            .language-name {
+                font-size: 1.2rem;
+            }
+            
+            .progress-container {
+                width: 200px;
+            }
+            
+            .welcome-button {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <!-- Background images related to Indian states -->
+        <div class="background-image" id="bg-hindi" style="background-image: url('india_2.jpg');"></div>
+        <div class="background-image" id="bg-english" style="background-image: url('english.jpg');"></div>
+        <div class="background-image" id="bg-kannada" style="background-image: url('kannada2.webp');"></div>
+        <div class="background-image" id="bg-tamil" style="background-image: url('tamil2.jpg');"></div>
+        <div class="background-image" id="bg-telugu" style="background-image: url('ap2.jpg');"></div>
+        <div class="background-image" id="bg-malayalam" style="background-image: url('kerala.jpg');"></div>
+        <div class="background-image" id="bg-bengali" style="background-image: url('bengali2.jpg');"></div>
+        <div class="background-image" id="bg-gujarati" style="background-image: url('health.png');"></div>
+        
+        <!-- Welcome text -->
+        <div class="welcome-text">
+            <h1 id="welcome-message">Welcome</h1>
+            <p id="welcome-subtitle">We're glad to have you here</p>
+            <div class="language-name" id="language-name">English</div>
+        </div>
+        
+        <!-- Progress bar only (no timer) -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <!-- Auto redirect message -->
+        <div class="auto-redirect-message" id="auto-redirect-message">
+            Redirecting to login page in <span id="countdown">3</span> seconds...
+        </div>
+        
+        <!-- Welcome button (initially hidden) -->
+        <button class="welcome-button" id="welcome-button" </button>Enter Website Now</button>
+    </div>
+
+    <script>
+        // Language data with state-related backgrounds
+        const languages = [
+            {
+                name: "Hindi",
+                className: "hindi",
+                welcome: "स्वागत हे",
+                subtitle: "आपका स्वागत है",
+                bgId: "bg-hindi",
+                state: "Uttar Pradesh"
+            },
+            {
+                name: "English",
+                className: "english",
+                welcome: "Welcome",
+                subtitle: "We're glad to have you here",
+                bgId: "bg-english",
+                state: "National"
+            },
+            {
+                name: "Kannada",
+                className: "kannada",
+                welcome: "ಸ್ವಾಗತ",
+                subtitle: "ನಿಮ್ಮನ್ನು ಸ್ವಾಗತಿಸಲು ನಮಗೆ ಸಂತೋಷವಾಗಿದೆ",
+                bgId: "bg-kannada",
+                state: "Karnataka"
+            },
+            {
+                name: "Tamil",
+                className: "tamil",
+                welcome: "வரவேற்பு",
+                subtitle: "உங்களை இங்கே வைத்திருப்பதில் நாங்கள் மகிழ்ச்சியடைகிறோம்",
+                bgId: "bg-tamil",
+                state: "Tamil Nadu"
+            },
+            {
+                name: "Telugu",
+                className: "telugu",
+                welcome: "స్వాగతం",
+                subtitle: "మిమ్మల్ని ఇక్కడ కలిగి ఉండటం మాకు సంతోషంగా ఉంది",
+                bgId: "bg-telugu",
+                state: "Andhra Pradesh & Telangana"
+            },
+            {
+                name: "Malayalam",
+                className: "malayalam",
+                welcome: "സ്വാഗതം",
+                subtitle: "നിങ്ങളെ ഇവിടെ സ്വീകരിക്കുന്നതിൽ ഞങ്ങൾ സന്തോഷിക്കുന്നു",
+                bgId: "bg-malayalam",
+                state: "Kerala"
+            },
+            {
+                name: "Bengali",
+                className: "bengali",
+                welcome: "স্বাগতম",
+                subtitle: "আপনাকে এখানে পেয়ে আমরা আনন্দিত",
+                bgId: "bg-bengali",
+                state: "West Bengal"
+            },
+            {
+                name: "Gujarati",
+                className: "gujarati",
+                welcome: "The greatest wealth is health.",
+                subtitle: "",
+                bgId: "bg-gujarati",
+                state: "Gujarat"
+            }
+        ];
+
+        // DOM elements
+        const welcomeMessage = document.getElementById('welcome-message');
+        const welcomeSubtitle = document.getElementById('welcome-subtitle');
+        const languageName = document.getElementById('language-name');
+        const progressBar = document.getElementById('progress-bar');
+        const welcomeButton = document.getElementById('welcome-button');
+        const autoRedirectMessage = document.getElementById('auto-redirect-message');
+        const countdownElement = document.getElementById('countdown');
+        
+        // Get all background elements
+        const backgroundElements = document.querySelectorAll('.background-image');
+        
+        // Animation variables
+        let currentIndex = 0;
+        const totalTime = 5000; // 5 seconds total for language animation
+        const redirectDelay = 1000; // 1 seconds delay after animation completes
+        let startTime;
+        let animationFrame;
+        let isComplete = false;
+        let countdownInterval;
+        let countdown = 1;
+        
+        // Function to update the display
+        function updateDisplay(index, progress) {
+            const currentLang = languages[index];
+            
+            // Update text content
+            welcomeMessage.textContent = currentLang.welcome;
+            welcomeSubtitle.textContent = currentLang.subtitle;
+            languageName.textContent = `${currentLang.name} (${currentLang.state})`;
+            
+            // Update classes for language-specific styling
+            welcomeMessage.className = currentLang.className;
+            welcomeSubtitle.className = currentLang.className;
+            
+            // Update background images
+            backgroundElements.forEach(bg => {
+                bg.classList.remove('active');
+            });
+            document.getElementById(currentLang.bgId).classList.add('active');
+            
+            // Update progress bar
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Function to start countdown and auto-redirect
+        function startAutoRedirect() {
+            autoRedirectMessage.classList.add('visible');
+            welcomeButton.classList.add('visible');
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    redirectToLogin();
+                }
+            }, 1000);
+        }
+        
+        // Function to redirect to login page
+        function redirectToLogin() {
+            window.location.href = 'form.html';
+        }
+        
+        // Animation function
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(100, (elapsed / totalTime) * 100);
+            
+            if (elapsed < totalTime) {
+                // Still animating
+                const languageIndex = Math.floor((elapsed / totalTime) * languages.length);
+                updateDisplay(languageIndex, progress);
+                animationFrame = requestAnimationFrame(animate);
+            } else {
+                // Animation complete
+                updateDisplay(languages.length - 1, 100);
+                completeAnimation();
+            }
+        }
+        
+        // Function called when animation completes
+        function completeAnimation() {
+            isComplete = true;
+            startAutoRedirect();
+        }
+        
+        // Initialize the animation
+        function init() {
+            startTime = Date.now();
+            updateDisplay(0, 0);
+            animate();
+        }
+        
+        // Start the animation
+        init();
+        
+        // Button click handler - redirect immediately to login page
+        welcomeButton.addEventListener('click', function() {
+            clearInterval(countdownInterval);
+            redirectToLogin();
+        });
+        
+        // Optional: Skip animation on click
+        document.addEventListener('click', function() {
+            if (!isComplete) {
+                cancelAnimationFrame(animationFrame);
+                completeAnimation();
+            }
+        });
+    </script>
+</body>
+</html>
