@@ -15,7 +15,7 @@
     }
     
     body {
-        background: linear-gradient(45deg,#540d6e,#001233, #f72585);
+        background: linear-gradient(45deg,violet,#001233, #f72585);
         color: white;
         min-height: 100vh;
         display: flex;
@@ -23,7 +23,34 @@
         padding: 0;
         margin: 0;
         overflow-x: hidden;
+         /* background: linear-gradient( 135deg,#451952,#030637,#070F2B,#352F44,#3C0753 ); */
+            min-height: 100vh;
+            color: var(--dark);
+            transition: var(--transition);
+             animation-name: bg; 
+    animation-duration: 10s;
+    animation-timing-function:ease;
+    animation-iteration-count: infinite;
+    background-size: 200% 200%;
     }
+
+      @keyframes bg{
+    0%{
+        background-position:0% 50%;
+    }
+    33%{
+        background-position:50% 100%;
+    }
+    66%{
+        background-position:100% 50%;
+    }
+    100%{
+        background-position:0% 50%;
+    }
+    /* 100%{
+        background-positon:0% 50%;
+    } */
+}
     
     /* Animated background elements */
     .bg-elements {
@@ -510,7 +537,7 @@
     </div>
     
     <header>
-        <h1>CURA TECH</h1>
+        <h1><i class="fa-solid fa-stethoscope"></i>CuraTECH</h1>
     </header>
     <main>
         <div class="form-container">
