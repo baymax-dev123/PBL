@@ -9,7 +9,7 @@ for mindfulness.
 • Yoga: Poses, routines, 
 and benefits.
 
-3) STAYING HEALTHY Guidance on 
+2) STAYING HEALTHY Guidance on 
 maintaining health 
 through nutrition. 
 • Eat Healthy: Nutritional 
@@ -19,20 +19,21 @@ advice and tips.
 Loss).
 
 
-5) CALORIES 
+3) CALORIES 
 CALCULATOR 
 A tool to calculate 
 calorie intake and 
-expenditure. 
- - 
-6) DISEASES Information database 
+expenditure.
+
+
+4) DISEASES Information database 
 on various illnesses. 
 Details on causes, 
 symptoms, and general 
 treatments.
 
 
-8) MEDICINES Information and access 
+5) MEDICINES Information and access 
 to pharmaceuticals. 
 • Medicine 
 Details: Information on 
@@ -43,7 +44,7 @@ purchase medicines
 online.
 
 
-10) BEST SPECIALIST Helps users find and 
+6) BEST SPECIALIST Helps users find and 
 choose healthcare 
 providers. 
 • Local Doctors: Directory 
@@ -53,10 +54,10 @@ contact information.
 CATEGORY MAIN-FEATURES DETAILS 
  
  
-11) WOMEN’S CARE Dedicated section for 
+7) WOMEN’S CARE Dedicated section for 
 women's health issues. 
  
-12) BLOOD BANK Locate blood banks 
+8) BLOOD BANK Locate blood banks 
 and donation centers. 
 • Local Blood 
 Bank: Directory of available 
@@ -65,7 +66,7 @@ blood banks.
 blood bank.
 
 
-14) SYMPTOMS 
+9) SYMPTOMS 
 CHECKER 
 An interactive tool for 
 preliminary diagnosis. 
@@ -83,7 +84,7 @@ immediate precautionary
 steps.
 
 
-16) EMERGENCY / 
+10) EMERGENCY / 
 FIRST AID 
 Critical information for 
 urgent situations. 
