@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️Symptom Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 20%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-100px) rotate(120deg); }
+            66% { transform: translateY(100px) rotate(240deg); }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Symptoms Section */
+        .symptoms-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: "🩺";
+            font-size: 1.2em;
+        }
+
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .symptom-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .symptom-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .symptom-card.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .symptom-card.selected::after {
+            content: "✓";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+        }
+
+        .symptom-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .symptom-name {
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .results-title {
+            font-size: 2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .disease-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .disease-name {
+            font-size: 1.8em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .match-percentage {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .info-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .medicine-card {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #667eea;
+        }
+
+        .medicine-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .medicine-dosage {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 30px;
+            color: #856404;
+        }
+
+        .disclaimer-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .symptoms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🏥 Symptom Checker</h1>
+            <p class="subtitle">Check your symptoms and get personalized health insights</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Select your symptoms to begin</div>
+            </div>
+
+            <!-- Symptoms Selection -->
+            <section class="symptoms-section" id="symptomsSection">
+                <h2 class="section-title">Select Your Symptoms</h2>
+                <div class="symptoms-grid" id="symptomsGrid">
+                    <!-- Symptoms will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" id="actionButtons">
+                <button class="btn btn-secondary" onclick="clearSelection()">
+                    <span>🔄</span>
+                    <span>Clear All</span>
+                </button>
+                <button class="btn btn-primary" id="checkBtn" onclick="checkSymptoms()" disabled>
+                    <span>🔍</span>
+                    <span>Check Symptoms</span>
+                </button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your symptoms...</p>
+            </div>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <h2 class="results-title">📋 Analysis Results</h2>
+                    <button class="btn btn-back" onclick="goBack()">
+                        <span>←</span>
+                        <span>Back to Symptoms</span>
+                    </button>
+                </div>
+                <!-- Results will be populated by JavaScript -->
+            </section>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <div class="disclaimer-title">
+                    <span>⚠️</span>
+                    <span>Medical Disclaimer</span>
+                </div>
+                <p>This symptom checker is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Symptoms Database
+        const symptoms = [
+            { id: 1, name: "Fever", icon: "🌡️" },
+            { id: 2, name: "Cough", icon: "😷" },
+            { id: 3, name: "Headache", icon: "🤕" },
+            { id: 4, name: "Sore Throat", icon: "😖" },
+            { id: 5, name: "Fatigue", icon: "😴" },
+            { id: 6, name: "Nausea", icon: "🤢" },
+            { id: 7, name: "Vomiting", icon: "🤮" },
+            { id: 8, name: "Diarrhea", icon: "🏃" },
+            { id: 9, name: "Body Aches", icon: "💪" },
+            { id: 10, name: "Chills", icon: "🥶" },
+            { id: 11, name: "Runny Nose", icon: "🤧" },
+            { id: 12, name: "Chest Pain", icon: "💔" },
+            { id: 13, name: "Shortness of Breath", icon: "😮" },
+            { id: 14, name: "Loss of Taste", icon: "👅" },
+            { id: 15, name: "Loss of Smell", icon: "👃" },
+            { id: 16, name: "Stomach Pain", icon: "🤰" },
+            { id: 17, name: "Dizziness", icon: "😵" },
+            { id: 18, name: "Rash", icon: "🔴" },
+            { id: 19, name: "Sneezing", icon: "🤧" },
+            { id: 20, name: "Watery Eyes", icon: "💧" },
+            { id: 21, name: "Difficulty Swallowing", icon: "😣" },
+            { id: 22, name: "Frequent Urination", icon: "🚽" },
+            { id: 23, name: "Burning Sensation", icon: "🔥" },
+            { id: 24, name: "Congestion", icon: "🤧" }
+        ];
+
+        // Diseases Database
+        const diseases = [
+            {
+                name: "Common Cold",
+                symptoms: [1, 2, 11, 19, 20, 24],
+                medicines: [
+                    { name: "Acetaminophen (Tylenol)", dosage: "500mg every 4-6 hours as needed" },
+                    { name: "Ibuprofen (Advil)", dosage: "200-400mg every 6-8 hours" },
+                    { name: "Decongestant (Sudafed)", dosage: "30mg every 4-6 hours" }
+                ],
+                prevention: [
+                    "Wash hands frequently with soap and water",
+                    "Avoid close contact with sick people",
+                    "Use hand sanitizer when soap isn't available",
+                    "Avoid touching your face, especially eyes and nose"
+                ],
+                selfCare: [
+                    "Get plenty of rest",
+                    "Stay hydrated by drinking lots of fluids",
+                    "Use a humidifier to ease congestion",
+                    "Gargle with warm salt water for sore throat"
+                ]
+            },
+            {
+                name: "Influenza (Flu)",
+                symptoms: [1, 2, 5, 9, 10, 3],
+                medicines: [
+                    { name: "Oseltamivir (Tamiflu)", dosage: "75mg twice daily for 5 days" },
+                    { name: "Acetaminophen", dosage: "500-1000mg every 6 hours" },
+                    { name: "Ibuprofen", dosage: "400-600mg every 6-8 hours" }
+                ],
+                prevention: [
+                    "Get annual flu vaccine",
+                    "Practice good hand hygiene",
+                    "Avoid crowded places during flu season",
+                    "Cover mouth and nose when coughing or sneezing"
+                ],
+                selfCare: [
+                    "Rest at home and avoid spreading the virus",
+                    "Drink plenty of fluids",
+                    "Use fever reducers as needed",
+                    "Monitor symptoms and seek medical help if severe"
+                ]
+            },
+            {
+                name: "COVID-19",
+                symptoms: [1, 2, 5, 13, 14, 15, 9],
+                medicines: [
+                    { name: "Acetaminophen", dosage: "650mg every 6 hours" },
+                    { name: "Dextromethorphan (for cough)", dosage: "10-20mg every 4 hours" },
+                    { name: "Paxlovid (prescription)", dosage: "As prescribed by doctor" }
+                ],
+                prevention: [
+                    "Get vaccinated and boosted",
+                    "Wear masks in crowded indoor spaces",
+                    "Practice social distancing",
+                    "Regular hand washing and sanitizing"
+                ],
+                selfCare: [
+                    "Isolate yourself to prevent spread",
+                    "Monitor oxygen levels if possible",
+                    "Stay hydrated and well-rested",
+                    "Seek immediate medical care if breathing becomes difficult"
+                ]
+            },
+            {
+                name: "Migraine",
+                symptoms: [3, 17, 18, 5],
+                medicines: [
+                    { name: "Sumatriptan (Imitrex)", dosage: "25-100mg at onset" },
+                    { name: "Excedrin Migraine", dosage: "2 tablets every 6 hours" },
+                    { name: "Propranolol (preventive)", dosage: "As prescribed" }
+                ],
+                prevention: [
+                    "Identify and avoid trigger foods",
+                    "Maintain regular sleep schedule",
+                    "Stay hydrated",
+                    "Manage stress through relaxation techniques"
+                ],
+                selfCare: [
+                    "Rest in a dark, quiet room",
+                    "Apply cold compress to forehead",
+                    "Practice deep breathing exercises",
+                    "Keep a headache diary to identify triggers"
+                ]
+            },
+            {
+                name: "Food Poisoning",
+                symptoms: [6, 7, 8, 16, 5],
+                medicines: [
+                    { name: "Oral Rehydration Solution", dosage: "As needed for dehydration" },
+                    { name: "Loperamide (Imodium)", dosage: "2mg after first loose stool" },
+                    { name: "Bismuth Subsalicylate (Pepto-Bismol)", dosage: "524mg every 30 minutes" }
+                ],
+                prevention: [
+                    "Cook foods to proper temperatures",
+                    "Wash hands before handling food",
+                    "Avoid cross-contamination",
+                    "Refrigerate perishable foods promptly"
+                ],
+                selfCare: [
+                    "Let your stomach settle",
+                    "Start with bland foods when ready to eat",
+                    "Avoid dairy, caffeine, and alcohol",
+                    "Rest and stay hydrated"
+                ]
+            },
+            {
+                name: "Allergic Rhinitis",
+                symptoms: [11, 19, 20, 3, 24],
+                medicines: [
+                    { name: "Loratadine (Claritin)", dosage: "10mg once daily" },
+                    { name: "Cetirizine (Zyrtec)", dosage: "10mg once daily" },
+                    { name: "Fluticasone nasal spray", dosage: "1-2 sprays each nostril daily" }
+                ],
+                prevention: [
+                    "Keep windows closed during high pollen seasons",
+                    "Use air purifiers with HEPA filters",
+                    "Shower after being outdoors",
+                    "Track pollen counts and stay indoors when high"
+                ],
+                selfCare: [
+                    "Use saline nasal rinses",
+                    "Apply cold compresses to eyes",
+                    "Avoid known allergens",
+                    "Consider allergy testing"
+                ]
+            },
+            {
+                name: "Strep Throat",
+                symptoms: [4, 1, 3, 5, 21],
+                medicines: [
+                    { name: "Amoxicillin", dosage: "500mg 3 times daily for 10 days" },
+                    { name: "Penicillin V", dosage: "250-500mg 4 times daily" },
+                    { name: "Acetaminophen", dosage: "500mg every 6 hours for pain" }
+                ],
+                prevention: [
+                    "Avoid sharing utensils and drinks",
+                    "Wash hands frequently",
+                    "Replace toothbrush after 48 hours of antibiotics",
+                    "Cover mouth when coughing or sneezing"
+                ],
+                selfCare: [
+                    "Get plenty of rest",
+                    "Drink warm liquids to soothe throat",
+                    "Use throat lozenges",
+                    "Gargle with warm salt water"
+                ]
+            },
+            {
+                name: "Pneumonia",
+                symptoms: [1, 2, 12, 13, 5, 9],
+                medicines: [
+                    { name: "Azithromycin", dosage: "500mg on day 1, then 250mg daily" },
+                    { name: "Amoxicillin-Clavulanate", dosage: "875mg twice daily" },
+                    { name: "Acetaminophen", dosage: "650mg every 6 hours for fever" }
+                ],
+                prevention: [
+                    "Get pneumococcal vaccine",
+                    "Get annual flu vaccine",
+                    "Don't smoke",
+                    "Practice good hygiene"
+                ],
+                selfCare: [
+                    "Complete full course of antibiotics",
+                    "Get plenty of rest",
+                    "Stay hydrated",
+                    "Use a humidifier",
+                    "Monitor breathing and seek help if worsens"
+                ]
+            },
+            {
+                name: "Acute Bronchitis",
+                symptoms: [2, 12, 9, 5, 1],
+                medicines: [
+                    { name: "Dextromethorphan", dosage: "10-20mg every 4 hours" },
+                    { name: "Guaifenesin", dosage: "200-400mg every 4 hours" },
+                    { name: "Ibuprofen", dosage: "400mg every 6-8 hours" }
+                ],
+                prevention: [
+                    "Avoid smoking and secondhand smoke",
+                    "Get flu vaccine annually",
+                    "Wash hands frequently",
+                    "Avoid lung irritants"
+                ],
+                selfCare: [
+                    "Rest and avoid overexertion",
+                    "Drink plenty of fluids",
+                    "Use a humidifier",
+                    "Avoid irritants like smoke",
+                    "Practice breathing exercises"
+                ]
+            },
+            {
+                name: "Sinusitis",
+                symptoms: [4, 24, 3, 11, 12],
+                medicines: [
+                    { name: "Pseudoephedrine", dosage: "30-60mg every 4-6 hours" },
+                    { name: "Fluticasone nasal spray", dosage: "1-2 sprays daily" },
+                    { name: "Amoxicillin (if bacterial)", dosage: "500mg 3 times daily" }
+                ],
+                prevention: [
+                    "Treat allergies promptly",
+                    "Use humidifier in dry climates",
+                    "Avoid cigarette smoke",
+                    "Practice good hand hygiene"
+                ],
+                selfCare: [
+                    "Use saline nasal spray",
+                    "Apply warm compresses",
+                    "Stay hydrated",
+                    "Elevate head while sleeping",
+                    "Steam inhalation"
+                ]
+            },
+            {
+                name: "Gastritis",
+                symptoms: [16, 6, 5, 7],
+                medicines: [
+                    { name: "Omeprazole (Prilosec)", dosage: "20mg once daily" },
+                    { name: "Ranitidine", dosage: "150mg twice daily" },
+                    { name: "Antacids (Tums)", dosage: "As needed for symptoms" }
+                ],
+                prevention: [
+                    "Avoid spicy and acidic foods",
+                    "Limit alcohol consumption",
+                    "Don't smoke",
+                    "Manage stress levels"
+                ],
+                selfCare: [
+                    "Eat smaller, more frequent meals",
+                    "Avoid eating 2-3 hours before bed",
+                    "Choose bland foods",
+                    "Stay hydrated with water",
+                    "Avoid NSAIDs like ibuprofen"
+                ]
+            },
+            {
+                name: "Urinary Tract Infection (UTI)",
+                symptoms: [22, 23, 16, 5],
+                medicines: [
+                    { name: "Nitrofurantoin", dosage: "100mg twice daily for 5 days" },
+                    { name: "Trimethoprim-sulfamethoxazole", dosage: "1 tablet twice daily" },
+                    { name: "Phenazopyridine (AZO)", dosage: "200mg 3 times daily" }
+                ],
+                prevention: [
+                    "Drink plenty of water daily",
+                    "Urinate after sexual activity",
+                    "Wipe from front to back",
+                    "Avoid holding urine for long periods"
+                ],
+                selfCare: [
+                    "Increase fluid intake",
+                    "Take cranberry supplements",
+                    "Avoid caffeine and alcohol",
+                    "Use heating pad for discomfort",
+                    "Wear cotton underwear"
+                ]
+            }
+        ];
+
+        // Global variables
+        let selectedSymptoms = new Set();
+
+        // Initialize the application
+        function init() {
+            renderSymptoms();
+            updateProgress();
+        }
+
+        // Render symptoms grid
+        function renderSymptoms() {
+            const grid = document.getElementById('symptomsGrid');
+            grid.innerHTML = '';
+            
+            symptoms.forEach(symptom => {
+                const card = document.createElement('div');
+                card.className = 'symptom-card';
+                card.dataset.id = symptom.id;
+                card.innerHTML = `
+                    <div class="symptom-icon">${symptom.icon}</div>
+                    <div class="symptom-name">${symptom.name}</div>
+                `;
+                card.addEventListener('click', () => toggleSymptom(symptom.id));
+                grid.appendChild(card);
+            });
+        }
+
+        // Toggle symptom selection
+        function toggleSymptom(symptomId) {
+            const card = document.querySelector(`[data-id="${symptomId}"]`);
+            
+            if (selectedSymptoms.has(symptomId)) {
+                selectedSymptoms.delete(symptomId);
+                card.classList.remove('selected');
+            } else {
+                selectedSymptoms.add(symptomId);
+                card.classList.add('selected');
+            }
+            
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            const percentage = (selectedSymptoms.size / symptoms.length) * 100;
+            progressFill.style.width = `${percentage}%`;
+            
+            if (selectedSymptoms.size === 0) {
+                progressText.textContent = 'Select your symptoms to begin';
+                checkBtn.disabled = true;
+            } else if (selectedSymptoms.size < 3) {
+                progressText.textContent = `Selected ${selectedSymptoms.size} symptom(s) - Select at least 3 for better results`;
+                checkBtn.disabled = true;
+            } else {
+                progressText.textContent = `Selected ${selectedSymptoms.size} symptom(s) - Ready to check!`;
+                checkBtn.disabled = false;
+            }
+        }
+
+        // Clear all selections
+        function clearSelection() {
+            selectedSymptoms.clear();
+            document.querySelectorAll('.symptom-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            updateProgress();
+            document.getElementById('resultsSection').style.display = 'none';
+        }
+
+        // Go back to symptom selection
+        function goBack() {
+            // Hide results section
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // Show symptoms section and action buttons
+            document.getElementById('symptomsSection').style.display = 'block';
+            document.getElementById('actionButtons').style.display = 'flex';
+            
+            // Clear previous selections for fresh start
+            selectedSymptoms.clear();
+            document.querySelectorAll('.symptom-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Reset progress
+            updateProgress();
+            
+            // Scroll to top of symptoms section
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Check symptoms and find matches
+        function checkSymptoms() {
+            if (selectedSymptoms.size < 3) {
+                alert('Please select at least 3 symptoms for better analysis');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('symptomsSection').style.display = 'none';
+            document.getElementById('actionButtons').style.display = 'none';
+            
+            // Simulate processing time
+            setTimeout(() => {
+                const matches = findDiseaseMatches();
+                displayResults(matches);
+                document.getElementById('loading').classList.remove('active');
+            }, 1500);
+        }
+
+        // Find disease matches based on symptoms
+        function findDiseaseMatches() {
+            const matches = [];
+            
+            diseases.forEach(disease => {
+                const matchingSymptoms = disease.symptoms.filter(s => selectedSymptoms.has(s));
+                const matchPercentage = (matchingSymptoms.length / disease.symptoms.length) * 100;
+                
+                if (matchingSymptoms.length >= 2) {
+                    matches.push({
+                        ...disease,
+                        matchPercentage: matchPercentage,
+                        matchingSymptoms: matchingSymptoms
+                    });
+                }
+            });
+            
+            // Sort by match percentage
+            matches.sort((a, b) => b.matchPercentage - a.matchPercentage);
+            
+            return matches.slice(0, 5); // Return top 5 matches
+        }
+
+        // Display results
+        function displayResults(matches) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContent = resultsSection.querySelector('.results-header').nextSibling;
+            
+            // Remove old results
+            while (resultsContent && resultsContent.nodeType === Node.ELEMENT_NODE) {
+                resultsContent.remove();
+            }
+            
+            if (matches.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'result-card';
+                noResults.innerHTML = `
+                    <h3>No Clear Match Found</h3>
+                    <p>Based on your symptoms, we couldn't find a clear match in our database. Please consult with a healthcare professional for proper diagnosis.</p>
+                `;
+                resultsSection.appendChild(noResults);
+            } else {
+                matches.forEach((match, index) => {
+                    const resultCard = createResultCard(match, index);
+                    resultsSection.appendChild(resultCard);
+                });
+            }
+            
+            resultsSection.style.display = 'block';
+        }
+
+        // Create result card for each disease
+        function createResultCard(disease, index) {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            card.innerHTML = `
+                <div class="disease-header">
+                    <h3 class="disease-name">${disease.name}</h3>
+                    <span class="match-percentage">${Math.round(disease.matchPercentage)}% Match</span>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab(${index}, 'overview')">Overview</button>
+                    <button class="tab" onclick="switchTab(${index}, 'medicines')">Medicines</button>
+                    <button class="tab" onclick="switchTab(${index}, 'prevention')">Prevention</button>
+                    <button class="tab" onclick="switchTab(${index}, 'selfcare')">Self-Care</button>
+                </div>
+                
+                <div class="tab-content active" id="tab-${index}-overview">
+                    <h4>Matching Symptoms:</h4>
+                    <ul class="info-list">
+                        ${disease.matchingSymptoms.map(sId => {
+                            const symptom = symptoms.find(sym => sym.id === sId);
+                            return `<li>${symptom.icon} ${symptom.name}</li>`;
+                        }).join('')}
+                    </ul>
+                    <p style="margin-top: 15px; color: #666;">
+                        <strong>Note:</strong> This is ${Math.round(disease.matchPercentage)}% match based on your selected symptoms. 
+                        Always consult with a healthcare professional for accurate diagnosis.
+                    </p>
+                </div>
+                
+                <div class="tab-content" id="tab-${index}-medicines">
+                    <h4>Recommended Medications:</h4>
+                    ${disease.medicines.map(med => `
+                        <div class="medicine-card">
+                            <div class="medicine-name">${med.name}</div>
+                            <div class="medicine-dosage">💊 ${med.dosage}</div>
+                        </div>
+                    `).join('')}
+                    <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                        Always follow your doctor's prescription and read medication labels carefully.
+                    </p>
+                </div>
+                
+                <div class="tab-content" id="tab-${index}-prevention">
+                    <h4>Preventive Measures:</h4>
+                    <ul class="info-list">
+                        ${disease.prevention.map(p => `<li>${p}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="tab-${index}-selfcare">
+                    <h4>Self-Care Tips:</h4>
+                    <ul class="info-list">
+                        ${disease.selfCare.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Switch tabs in result cards
+        function switchTab(cardIndex, tabName) {
+            // Hide all tabs for this card
+            document.querySelectorAll(`[id^="tab-${cardIndex}-"]`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons for this card
+            const card = document.querySelectorAll('.result-card')[cardIndex];
+            card.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`tab-${cardIndex}-${tabName}`).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

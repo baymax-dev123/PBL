@@ -28,7 +28,7 @@
             color: var(--dark);
             transition: var(--transition);
              animation-name: bg; 
-    animation-duration: 10s;
+    animation-duration: 7s;
     animation-timing-function:ease;
     animation-iteration-count: infinite;
     background-size: 200% 200%;
@@ -694,14 +694,30 @@
                 alertMessage.style.display = 'block';
                 return;
             }
+           // Check for special character
+if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+    alertMessage.textContent = 'Password must contain at least one special character!';
+    alertMessage.style.display = 'block';
+    return;
+}
             
-            // If validation passes
-            successMessage.style.display = 'block';
             
-            // Simulate login process and redirect
-            setTimeout(function() {
-                window.location.href = '_1.2.html';
-            }, 1500);
+            // // If validation passes
+            // successMessage.style.display = 'block';
+            
+            // // Simulate login process and redirect
+            // setTimeout(function() {
+            //     window.location.href = 'main.html';
+            // }, 1500);
+            // Inside loginForm submit event, after all validations pass
+// If validation passes
+successMessage.style.display = 'block';
+
+
+localStorage.setItem('isLoggedIn', 'true');  
+setTimeout(function() {
+    window.location.href = 'main.html';  // Your main dashboard page
+}, 1500);
         });
         
         // Registration form validation
@@ -757,7 +773,7 @@
             
             // Simulate registration process and redirect
             setTimeout(function() {
-                window.location.href = '_1.2.html';
+                window.location.href = 'form.html';
             }, 1500);
         });
         
@@ -776,7 +792,19 @@
             } else {
                 this.style.borderColor = 'rgba(255, 255, 255, 0.15)';
             }
+
         });
+
+       document.getElementById('password').addEventListener('input', function() {
+    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(this.value);
+    const hasLength = this.value.length >= 6;
+
+    if (hasLength && hasSpecial) {
+        this.style.borderColor = '#2ecc71';
+    } else {
+        this.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+    }
+});
         
         document.getElementById('reg-password').addEventListener('input', function() {
             const confirmPassword = document.getElementById('confirm-password');

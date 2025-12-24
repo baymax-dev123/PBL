@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0f1e;
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        #animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.1);
+            animation: float 15s infinite linear;
+        }
+        
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            background: rgba(16, 185, 129, 0.15);
+        }
+        
+        .bg-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .bg-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 20%;
+            left: 70%;
+            animation-delay: -10s;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .bg-circle:nth-child(4) {
+            width: 250px;
+            height: 250px;
+            top: 70%;
+            left: 10%;
+            animation-delay: -7s;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-40px) rotate(180deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+        
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: #10b981;
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: #f5f5f5;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        nav a:hover {
+            color: #10b981;
+        }
+        
+        .active {
+            color: #10b981;
+        }
+        
+        .cta-button {
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            color: white;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        
+        .hero h2 {
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            color: #d1d5db;
+        }
+        
+        /* Section Styling */
+        section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background-color: rgba(15, 23, 42, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .section-title i {
+            color: #10b981;
+        }
+        
+        /* Workout Plans */
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .plan-card {
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 1.8rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #10b981;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2);
+        }
+        
+        .plan-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #10b981;
+        }
+        
+        .plan-card ul {
+            list-style-position: inside;
+            margin-bottom: 1.5rem;
+        }
+        
+        .plan-card li {
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+        }
+        
+        /* Tutorials */
+        .tutorials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tutorial-card {
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .tutorial-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .tutorial-img {
+            height: 180px;
+            background-color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #10b981;
+        }
+        
+        .tutorial-content {
+            padding: 1.5rem;
+        }
+        
+        .tutorial-content h3 {
+            margin-bottom: 0.8rem;
+            color: #f5f5f5;
+        }
+        
+        .tutorial-content p {
+            color: #d1d5db;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+        
+        /* Fitness Tracker */
+        .tracker-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .tracker-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stat-card {
+            background-color: rgba(30, 41, 59, 0.8);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #d1d5db;
+            font-size: 1.1rem;
+        }
+        
+        .tracker-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .tracker-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .start-btn {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .pause-btn {
+            background-color: #f59e0b;
+            color: white;
+        }
+        
+        .reset-btn {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .tracker-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(10, 15, 30, 0.9);
+            border-top: 1px solid rgba(16, 185, 129, 0.3);
+            margin-top: 3rem;
+        }
+        
+        footer p {
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icons a {
+            color: #f5f5f5;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: #10b981;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.7rem;
+            }
+            
+            .plans-container, .tutorials-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Workout Timer */
+        .workout-timer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+        }
+        
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="animated-bg">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-dumbbell"></i>
+            <h1>FitTECH</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#workout-plans">Workout Plans</a></li>
+                <li><a href="#tutorials">Tutorials</a></li>
+                <li><a href="#tracker">Fitness Tracker</a></li>
+            </ul>
+        </nav>
+        <a href="#tracker" class="cta-button">Start Tracking</a>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <section class="hero">
+            <h2>Transform Your Fitness Journey</h2>
+            <p>Get personalized workout plans, step-by-step exercise tutorials, and powerful fitness tracking tools to help you achieve your health and fitness goals.</p>
+            <a href="#workout-plans" class="cta-button">Explore Workout Plans</a>
+        </section>
+        
+        <!-- Workout Plans Section -->
+        <section id="workout-plans">
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Custom Workout Plans</h2>
+            <div class="plans-container">
+                <div class="plan-card">
+                    <h3>Beginner Plan</h3>
+                    <p>Perfect for those new to fitness. Build a solid foundation with low-intensity workouts.</p>
+                    <ul>
+                        <li>3 workouts per week</li>
+                        <li>Full-body focus</li>
+                        <li>30-minute sessions</li>
+                        <li>Bodyweight exercises</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Select Plan</a>
+                </div>
+                
+                <div class="plan-card">
+                    <h3>Intermediate Plan</h3>
+                    <p>For those with some experience looking to increase intensity and build muscle.</p>
+                    <ul>
+                        <li>4-5 workouts per week</li>
+                        <li>Split routines (push/pull/legs)</li>
+                        <li>45-60 minute sessions</li>
+                        <li>Weight training included</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Select Plan</a>
+                </div>
+                
+                <div class="plan-card">
+                    <h3>Advanced Plan</h3>
+                    <p>For experienced athletes seeking maximum performance and physique development.</p>
+                    <ul>
+                        <li>5-6 workouts per week</li>
+                        <li>Specialized split routines</li>
+                        <li>60-90 minute sessions</li>
+                        <li>Advanced techniques</li>
+                    </ul>
+                    <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Select Plan</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Exercise Tutorials Section -->
+        <section id="tutorials">
+            <h2 class="section-title"><i class="fas fa-video"></i> Exercise Tutorials</h2>
+            <div class="tutorials-container">
+                <div class="tutorial-card">
+                    <div class="tutorial-img">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="tutorial-content">
+                        <h3>Proper Squat Form</h3>
+                        <p>Learn the correct technique for squats to maximize gains and prevent injury. Includes variations for all levels.</p>
+                        <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Watch Tutorial</a>
+                    </div>
+                </div>
+                
+                <div class="tutorial-card">
+                    <div class="tutorial-img">
+                        <i class="fas fa-weight-hanging"></i>
+                    </div>
+                    <div class="tutorial-content">
+                        <h3>Deadlift Mastery</h3>
+                        <p>Master the king of all exercises. Step-by-step guide to proper deadlift form and progression.</p>
+                        <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Watch Tutorial</a>
+                    </div>
+                </div>
+                
+                <div class="tutorial-card">
+                    <div class="tutorial-img">
+                        <i class="fas fa-fire-alt"></i>
+                    </div>
+                    <div class="tutorial-content">
+                        <h3>HIIT Workouts</h3>
+                        <p>High-Intensity Interval Training routines to burn maximum calories in minimal time.</p>
+                        <a href="#" class="cta-button" style="padding: 0.6rem 1.2rem; display: inline-block;">Watch Tutorial</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Fitness Tracker Section -->
+        <section id="tracker">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Fitness Tracker</h2>
+            <div class="tracker-container">
+                <div class="tracker-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="workout-count">0</div>
+                        <div class="stat-label">Workouts Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="calories-burned">0</div>
+                        <div class="stat-label">Calories Burned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="workout-time">0:00</div>
+                        <div class="stat-label">Workout Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="current-streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+                
+                <div class="workout-timer">
+                    <h3>Workout Timer</h3>
+                    <div class="timer-display" id="timer-display">00:00</div>
+                    <div class="tracker-controls">
+                        <button class="tracker-btn start-btn" id="start-timer">Start Workout</button>
+                        <button class="tracker-btn pause-btn" id="pause-timer">Pause</button>
+                        <button class="tracker-btn reset-btn" id="reset-timer">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="tracker-controls">
+                    <button class="tracker-btn start-btn" id="log-workout">Log Workout</button>
+                    <button class="tracker-btn pause-btn" id="add-calories">Add 100 Calories</button>
+                    <button class="tracker-btn reset-btn" id="reset-stats">Reset Stats</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FitTECH. All rights reserved.</p>
+        <p>Custom workout plans, exercise tutorials, and fitness tracking to help you achieve your goals.</p>
+        <!-- <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div> -->
+    </footer>
+    
+    <script>
+        // Fitness Tracker Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Timer variables
+            let timerInterval;
+            let timerSeconds = 0;
+            let timerRunning = false;
+            
+            // Stats variables
+            let workoutCount = 0;
+            let caloriesBurned = 0;
+            let currentStreak = 0;
+            
+            // DOM Elements
+            const timerDisplay = document.getElementById('timer-display');
+            const startTimerBtn = document.getElementById('start-timer');
+            const pauseTimerBtn = document.getElementById('pause-timer');
+            const resetTimerBtn = document.getElementById('reset-timer');
+            const workoutCountEl = document.getElementById('workout-count');
+            const caloriesBurnedEl = document.getElementById('calories-burned');
+            const workoutTimeEl = document.getElementById('workout-time');
+            const currentStreakEl = document.getElementById('current-streak');
+            const logWorkoutBtn = document.getElementById('log-workout');
+            const addCaloriesBtn = document.getElementById('add-calories');
+            const resetStatsBtn = document.getElementById('reset-stats');
+            
+            // Load saved stats from localStorage
+            loadStats();
+            
+            // Timer Functions
+            function startTimer() {
+                if (!timerRunning) {
+                    timerRunning = true;
+                    timerInterval = setInterval(updateTimer, 1000);
+                    startTimerBtn.textContent = "Resume Workout";
+                    startTimerBtn.classList.remove('start-btn');
+                    startTimerBtn.classList.add('pause-btn');
+                }
+            }
+            
+            function pauseTimer() {
+                if (timerRunning) {
+                    timerRunning = false;
+                    clearInterval(timerInterval);
+                    startTimerBtn.textContent = "Resume Workout";
+                    startTimerBtn.classList.remove('pause-btn');
+                    startTimerBtn.classList.add('start-btn');
+                }
+            }
+            
+            function resetTimer() {
+                timerRunning = false;
+                clearInterval(timerInterval);
+                timerSeconds = 0;
+                updateTimerDisplay();
+                startTimerBtn.textContent = "Start Workout";
+                startTimerBtn.classList.remove('pause-btn');
+                startTimerBtn.classList.add('start-btn');
+            }
+            
+            function updateTimer() {
+                timerSeconds++;
+                updateTimerDisplay();
+                updateWorkoutTimeStat();
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Stats Functions
+            function updateWorkoutTimeStat() {
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                workoutTimeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function logWorkout() {
+                workoutCount++;
+                workoutCountEl.textContent = workoutCount;
+                
+                // Calculate calories burned based on workout time (approx 10 calories per minute)
+                const calories = Math.floor(timerSeconds / 60) * 10;
+                caloriesBurned += calories;
+                caloriesBurnedEl.textContent = caloriesBurned;
+                
+                // Increase streak if this is the first workout today
+                const lastWorkoutDate = localStorage.getItem('lastWorkoutDate');
+                const today = new Date().toDateString();
+                
+                if (lastWorkoutDate !== today) {
+                    currentStreak++;
+                    currentStreakEl.textContent = currentStreak;
+                    localStorage.setItem('lastWorkoutDate', today);
+                }
+                
+                saveStats();
+                resetTimer();
+                
+                // Show notification
+                alert(`Workout logged! You burned approximately ${calories} calories.`);
+            }
+            
+            function addCalories() {
+                caloriesBurned += 100;
+                caloriesBurnedEl.textContent = caloriesBurned;
+                saveStats();
+            }
+            
+            function resetStats() {
+                if (confirm("Are you sure you want to reset all your fitness stats?")) {
+                    workoutCount = 0;
+                    caloriesBurned = 0;
+                    currentStreak = 0;
+                    
+                    workoutCountEl.textContent = workoutCount;
+                    caloriesBurnedEl.textContent = caloriesBurned;
+                    currentStreakEl.textContent = currentStreak;
+                    
+                    resetTimer();
+                    saveStats();
+                }
+            }
+            
+            function saveStats() {
+                const stats = {
+                    workoutCount,
+                    caloriesBurned,
+                    currentStreak
+                };
+                localStorage.setItem('fitnessStats', JSON.stringify(stats));
+            }
+            
+            function loadStats() {
+                const savedStats = localStorage.getItem('fitnessStats');
+                if (savedStats) {
+                    const stats = JSON.parse(savedStats);
+                    workoutCount = stats.workoutCount || 0;
+                    caloriesBurned = stats.caloriesBurned || 0;
+                    currentStreak = stats.currentStreak || 0;
+                    
+                    workoutCountEl.textContent = workoutCount;
+                    caloriesBurnedEl.textContent = caloriesBurned;
+                    currentStreakEl.textContent = currentStreak;
+                }
+                
+                // Check streak
+                const lastWorkoutDate = localStorage.getItem('lastWorkoutDate');
+                const today = new Date().toDateString();
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastWorkoutDate === yesterday.toDateString()) {
+                    // Continue streak
+                } else if (lastWorkoutDate !== today) {
+                    // Reset streak if not today or yesterday
+                    currentStreak = 0;
+                    currentStreakEl.textContent = currentStreak;
+                }
+            }
+            
+            // Event Listeners
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+            logWorkoutBtn.addEventListener('click', logWorkout);
+            addCaloriesBtn.addEventListener('click', addCalories);
+            resetStatsBtn.addEventListener('click', resetStats);
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Create animated background circles
+            const animatedBg = document.getElementById('animated-bg');
+            for (let i = 0; i < 8; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'bg-circle';
+                
+                // Random properties
+                const size = Math.floor(Math.random() * 150) + 50;
+                const left = Math.floor(Math.random() * 90);
+                const top = Math.floor(Math.random() * 90);
+                const animationDelay = Math.floor(Math.random() * 20) - 20;
+                
+                circle.style.width = `${size}px`;
+                circle.style.height = `${size}px`;
+                circle.style.left = `${left}%`;
+                circle.style.top = `${top}%`;
+                circle.style.animationDelay = `${animationDelay}s`;
+                
+                // Random color
+                const colors = [
+                    'rgba(16, 185, 129, 0.1)',
+                    'rgba(59, 130, 246, 0.1)',
+                    'rgba(239, 68, 68, 0.1)',
+                    'rgba(245, 158, 11, 0.1)',
+                    'rgba(139, 92, 246, 0.1)'
+                ];
+                circle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                animatedBg.appendChild(circle);
+            }
+        });
+    </script>
+</body>
+</html>

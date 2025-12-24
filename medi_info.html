@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediInfo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #2196F3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --danger: #e53935;
+            --warning: #ff9800;
+            --success: #4CAF50;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+            font-size: 2rem;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        #medicine-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .medicine-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .medicine-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .medicine-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .medicine-icon {
+            font-size: 1.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .medicine-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .medicine-body {
+            padding: 1.5rem;
+        }
+
+        .medicine-type {
+            display: inline-block;
+            background: var(--light-gray);
+            color: var(--gray);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .medicine-description {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .medicine-uses {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .use-tag {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-dark);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        #medicine-detail {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .detail-header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .detail-title {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-type {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 0.5rem;
+        }
+
+        .detail-body {
+            padding: 2rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .detail-content {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .warnings {
+            background-color: rgba(229, 57, 53, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--light-gray);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .disclaimer {
+            max-width: 700px;
+            margin: 1.5rem 0;
+            color: #adb5bd;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-container {
+                width: 100%;
+                max-width: 500px;
+            }
+            
+            #medicine-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .medicine-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .detail-body {
+                padding: 1.5rem;
+            }
+            
+            .detail-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-pills"></i>
+                    <span>MediInfo</span>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search for medicines...">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">Common Medicines</h1>
+        <div id="medicine-list">
+            <!-- Medicine cards will be generated here -->
+        </div>
+        
+        <div id="medicine-detail">
+            <!-- Medicine details will be displayed here -->
+        </div>
+        
+        <div id="no-results" class="no-results" style="display: none;">
+            <i class="fas fa-search"></i>
+            <p>No medicines found. Try a different search term.</p>
+        </div>
+    </main>
+
+    <!-- <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-pills"></i>
+                    <span>MediInfo</span>
+                </div>
+                <p class="disclaimer">
+                    This website provides general information about common medicines for educational purposes only. 
+                    Always consult your doctor or pharmacist before taking any medication. 
+                    The information here is not a substitute for professional medical advice.
+                </p>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> Terms of Use</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer> -->
+
+    <script>
+        // Medicine data
+        const medicines = [
+            {
+                id: 1,
+                name: "Paracetamol",
+                type: "Pain Reliever / Fever Reducer",
+                description: "A common over-the-counter medication used to treat mild to moderate pain and reduce fever.",
+                uses: ["Headache", "Fever", "Muscle aches", "Cold symptoms"],
+                dosage: "Adults: 500-1000mg every 4-6 hours as needed. Do not exceed 4000mg in 24 hours.",
+                sideEffects: "Generally well tolerated when used as directed. Rare side effects include nausea, rash, or allergic reactions. Liver damage can occur with overdose.",
+                warnings: "Do not consume alcohol while taking paracetamol. Avoid if you have severe liver disease. Consult a doctor before use if you have liver or kidney problems.",
+                interactions: "May interact with blood thinners (warfarin), certain seizure medications, and alcohol."
+            },
+            {
+                id: 2,
+                name: "Ibuprofen",
+                type: "NSAID (Nonsteroidal Anti-Inflammatory Drug)",
+                description: "Used to reduce fever and treat pain or inflammation caused by conditions such as headache, toothache, back pain, arthritis, menstrual cramps, or minor injury.",
+                uses: ["Pain relief", "Inflammation", "Fever", "Arthritis"],
+                dosage: "Adults: 200-400mg every 4-6 hours as needed. Do not exceed 1200mg in 24 hours without medical advice.",
+                sideEffects: "Stomach pain, heartburn, nausea, vomiting, dizziness, or headache. May increase risk of heart attack or stroke with long-term use.",
+                warnings: "Do not use if you have a history of stomach ulcers, heart disease, or kidney problems. Avoid during last trimester of pregnancy.",
+                interactions: "May interact with blood pressure medications, blood thinners, aspirin, and certain antidepressants."
+            },
+            {
+                id: 3,
+                name: "Loratadine",
+                type: "Antihistamine",
+                description: "Used to temporarily relieve symptoms of hay fever and other allergies, such as sneezing, runny nose, and itchy eyes.",
+                uses: ["Allergies", "Hay fever", "Hives", "Itchy skin"],
+                dosage: "Adults and children 6+: 10mg once daily. Do not exceed recommended dose.",
+                sideEffects: "Generally non-drowsy, but may cause headache, dry mouth, or fatigue in some people.",
+                warnings: "Consult a doctor before use if you have liver or kidney disease. Not recommended for children under 2 years without medical advice.",
+                interactions: "Few interactions, but may interact with certain antibiotics and antifungal medications."
+            },
+            {
+                id: 4,
+                name: "Omeprazole",
+                type: "Proton Pump Inhibitor (PPI)",
+                description: "Reduces stomach acid production and is used to treat symptoms of gastroesophageal reflux disease (GERD) and other conditions caused by excess stomach acid.",
+                uses: ["Heartburn", "GERD", "Stomach ulcers", "Acid reflux"],
+                dosage: "Adults: 20mg once daily for 14 days. Do not use for more than 14 days without consulting a doctor.",
+                sideEffects: "Headache, stomach pain, nausea, diarrhea, or gas. Long-term use may increase risk of bone fractures.",
+                warnings: "Not for immediate relief of heartburn. Consult a doctor if you have liver disease or osteoporosis.",
+                interactions: "May interact with blood thinners, clopidogrel, and certain antifungal medications."
+            },
+            {
+                id: 5,
+                name: "Cetirizine",
+                type: "Antihistamine",
+                description: "Relieves allergy symptoms such as sneezing, runny nose, itchy eyes, and hives by blocking histamine in the body.",
+                uses: ["Allergies", "Hay fever", "Hives", "Itchy skin"],
+                dosage: "Adults and children 6+: 10mg once daily. May take 5mg if drowsiness occurs.",
+                sideEffects: "Drowsiness, dry mouth, fatigue, or stomach pain in some individuals.",
+                warnings: "May cause drowsiness. Use caution when driving or operating machinery. Consult a doctor before use if pregnant or breastfeeding.",
+                interactions: "May increase drowsiness when taken with alcohol, sedatives, or tranquilizers."
+            },
+            {
+                id: 6,
+                name: "Diphenhydramine",
+                type: "Antihistamine / Sleep Aid",
+                description: "Used to relieve symptoms of allergy, hay fever, and the common cold. Also used as a sleep aid and to treat motion sickness.",
+                uses: ["Allergies", "Insomnia", "Motion sickness", "Cough"],
+                dosage: "Adults: 25-50mg every 4-6 hours as needed. Do not exceed 300mg in 24 hours.",
+                sideEffects: "Drowsiness, dizziness, dry mouth, constipation, or blurred vision.",
+                warnings: "May cause significant drowsiness. Avoid alcohol. Not recommended for children under 6 years without medical advice.",
+                interactions: "May interact with sedatives, tranquilizers, and other central nervous system depressants."
+            }
+        ];
+
+        // DOM Elements
+        const medicineList = document.getElementById('medicine-list');
+        const medicineDetail = document.getElementById('medicine-detail');
+        const searchInput = document.getElementById('search-input');
+        const noResults = document.getElementById('no-results');
+
+        // Display medicines
+        function displayMedicines(meds = medicines) {
+            medicineList.innerHTML = '';
+            medicineDetail.style.display = 'none';
+            noResults.style.display = 'none';
+            
+            if (meds.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            meds.forEach(med => {
+                const card = document.createElement('div');
+                card.className = 'medicine-card';
+                card.innerHTML = `
+                    <div class="medicine-header">
+                        <div class="medicine-icon">
+                            <i class="fas fa-capsules"></i>
+                        </div>
+                        <div class="medicine-name">${med.name}</div>
+                    </div>
+                    <div class="medicine-body">
+                        <span class="medicine-type">${med.type}</span>
+                        <p class="medicine-description">${med.description}</p>
+                        <div class="medicine-uses">
+                            ${med.uses.map(use => `<span class="use-tag">${use}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => showMedicineDetail(med));
+                medicineList.appendChild(card);
+            });
+        }
+
+        // Show medicine detail
+        function showMedicineDetail(med) {
+            medicineList.style.display = 'none';
+            noResults.style.display = 'none';
+            
+            medicineDetail.innerHTML = `
+                <div class="detail-header">
+                    <h2 class="detail-title">${med.name}</h2>
+                    <span class="detail-type">${med.type}</span>
+                </div>
+                <div class="detail-body">
+                    <div class="detail-section">
+                        <h3>Description</h3>
+                        <p class="detail-content">${med.description}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Common Uses</h3>
+                        <p class="detail-content">${med.uses.join(', ')}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Recommended Dosage</h3>
+                        <p class="detail-content">${med.dosage}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Possible Side Effects</h3>
+                        <p class="detail-content">${med.sideEffects}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Important Warnings</h3>
+                        <p class="detail-content">${med.warnings}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Drug Interactions</h3>
+                        <p class="detail-content">${med.interactions}</p>
+                    </div>
+                    
+                    <div class="warnings">
+                        <strong>Disclaimer:</strong> This information is for educational purposes only. Always consult your healthcare provider before taking any medication.
+                    </div>
+                    
+                    <div class="back-button" id="back-to-list">
+                        <i class="fas fa-arrow-left"></i> Back to Medicines
+                    </div>
+                </div>
+            `;
+            
+            medicineDetail.style.display = 'block';
+            
+            // Add event listener to back button
+            document.getElementById('back-to-list').addEventListener('click', () => {
+                medicineDetail.style.display = 'none';
+                medicineList.style.display = 'grid';
+                searchInput.value = '';
+                displayMedicines();
+            });
+        }
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm === '') {
+                displayMedicines();
+                return;
+            }
+            
+            const filtered = medicines.filter(med => 
+                med.name.toLowerCase().includes(searchTerm) || 
+                med.type.toLowerCase().includes(searchTerm) ||
+                med.uses.some(use => use.toLowerCase().includes(searchTerm))
+            );
+            
+            displayMedicines(filtered);
+        });
+
+        // Initialize the page
+        displayMedicines();
+    </script>
+</body>
+</html>
+

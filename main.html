@@ -1,76 +1,622 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>MAIN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CuraTECH</title>
+    <!-- <link rel="logo" href="<i class="fa-solid fa-stethoscope"></i>> -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
       * {
         margin: 0;
         padding: 0;
-        box-sizing: border-box; /* Added for consistent box model */
-      }
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Open+Sans:wght@400;500&display=swap");
-
-      .navbar {
-        width: 600px;
-        height: 60px;
-        background-color: #b7a3e3;
-        display: flex; /* Use flexbox to center content */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically */
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
 
-      #titlebar {
-        display: flex; /* Use flexbox to center the title div */
-        justify-content: center;
-        align-items: center;
-        height: 100%; /* Take full height of navbar */
+      :root {
+        --primary: #2a7de1;
+        --secondary: #1a5fb4;
+        --accent: #00d9ff;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #28a745;
+        --danger: #dc3545;
+        --warning: #ffc107;
+        --info: #17a2b8;
       }
 
-      #title {
-        font-family: "Poppins", sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        color: #2c3e50;
-        display: inline-flex; /* Make it inline-flex so border wraps content */
-        /* Vertically align icon and text */
-        gap: 8px; /* Space between icon and text */
-        padding: 8px 15px; /* Padding inside the border */
-        border: 2px solid #2c3e50; /* Border around the title, matching text color */
-        border-radius: 8px; /* Slightly rounded corners for the border */
-      }
-
-      /* #navbar{
+      body {
+        background: linear-gradient(-45deg, #932f67, #352b40, purple, pink);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        color: var(--light);
+        overflow-x: hidden;
+        min-height: 100vh;
         display: flex;
-        justify-content:right ;
-        align-items: right;
-        background-color:  lightblue;
-      } */
+        flex-direction: column;
+      }
+
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header Styles */
+      header {
+        padding: 20px 0;
+        position: relative;
+        z-index: 10;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .logo i {
+        font-size: 2.5rem;
+        color: var(--accent);
+      }
+
+      .logo h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        background: linear-gradient(to right, var(--accent), var(--light));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .tagline {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        text-align: center;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 10px 20px;
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+      }
+
+      /* Main Content Styles */
+      main {
+        flex: 1;
+        padding: 20px 0 50px;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+      }
+
+      .service-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 220px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .service-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+
+      .service-card:hover::before {
+        transform: translateX(100%);
+      }
+
+      .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .service-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        font-size: 1.8rem;
+        color: var(--accent);
+      }
+
+      .service-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+        color: white;
+      }
+
+      .service-card p {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        line-height: 1.5;
+      }
+
+      /* Particles Animation */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        animation: float 15s infinite linear;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Footer Styles */
+      footer {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 40px 0 20px;
+        margin-top: auto;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .footer-section h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        color: var(--accent);
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-section h3::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 10px;
+        display: block;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: var(--accent);
+        padding-left: 5px;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        transform: translateY(-5px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .logo h1 {
+          font-size: 1.8rem;
+        }
+
+        .services-grid {
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
+        }
+
+        .service-card {
+          padding: 20px;
+          min-height: 200px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+        }
+
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .tagline {
+          font-size: 1rem;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="navbar">
-      <div id="titlebar">
-        <div id="title"><i class="fa-solid fa-stethoscope"></i>CuraTECH</div>
-      </div>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+      <header>
+        <div class="logo">
+          <i class="fa-solid fa-stethoscope"></i>
+          <h1>CuraTECH</h1>
+        </div>
+        <p class="tagline">
+          Your complete health and wellness solution - empowering you to live a
+          healthier, happier life
+        </p>
+      </header>
+
+      <main>
+        <div class="services-grid">
+          <!-- Fitness Section -->
+          <div class="service-card" onclick="redirectTo('fitness')">
+            <div class="service-icon">
+              <i class="fas fa-dumbbell"></i>
+            </div>
+            <h3>Fitness & Exercise</h3>
+            <p>
+              Custom workout plans, exercise tutorials, and fitness tracking to
+              help you achieve your goals.
+            </p>
+          </div>
+
+          <!-- Staying Healthy Section -->
+          <div class="service-card" onclick="redirectTo('healthy-living')">
+            <div class="service-icon">
+              <i class="fas fa-apple-alt"></i>
+            </div>
+            <h3>Staying Healthy</h3>
+            <p>
+              Nutrition guides, wellness tips, and healthy lifestyle resources
+              for optimal wellbeing.
+            </p>
+          </div>
+
+          <!-- Calories Calculator Section -->
+          <div class="service-card" onclick="redirectTo('calories-calculator')">
+            <div class="service-icon">
+              <i class="fas fa-calculator"></i>
+            </div>
+            <h3>Calories Calculator</h3>
+            <p>
+              Calculate your daily calorie needs, track food intake, and manage
+              your nutrition effectively.
+            </p>
+          </div>
+
+          <!-- Diseases Section -->
+          <div class="service-card" onclick="redirectTo('diseases')">
+            <div class="service-icon">
+              <i class="fas fa-virus"></i>
+            </div>
+            <h3>Diseases Information</h3>
+            <p>
+              Comprehensive information about various diseases, symptoms,
+              prevention, and treatments.
+            </p>
+          </div>
+
+          <!-- Medicines Section -->
+          <div class="service-card" onclick="redirectTo('medicines')">
+            <div class="service-icon">
+              <i class="fas fa-pills"></i>
+            </div>
+            <h3>Medicines Information</h3>
+            <p>
+              Detailed information about medications, usage, side effects, and
+              interactions.
+            </p>
+          </div>
+
+          <!-- Best Specialists Section -->
+          <div class="service-card" onclick="redirectTo('specialists')">
+            <div class="service-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <h3>Find Specialists</h3>
+            <p>
+              Locate and book appointments with top healthcare specialists in
+              your area.
+            </p>
+          </div>
+
+          <!-- Women's Care Section -->
+          <div class="service-card" onclick="redirectTo('womens-care')">
+            <div class="service-icon">
+              <i class="fas fa-female"></i>
+            </div>
+            <h3>Women's Care</h3>
+            <p>
+              Specialized healthcare resources and support for women's unique
+              health needs.
+            </p>
+          </div>
+
+          <!-- Blood Bank Section -->
+          <div class="service-card" onclick="redirectTo('blood-bank')">
+            <div class="service-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h3>Blood Bank</h3>
+            <p>
+              Find blood donors, donation centers, and manage blood bank
+              services in your locality.
+            </p>
+          </div>
+
+          <!-- Symptoms Checker Section -->
+          <div class="service-card" onclick="redirectTo('symptoms-checker')">
+            <div class="service-icon">
+              <i class="fas fa-stethoscope"></i>
+            </div>
+            <h3>Symptoms Checker</h3>
+            <p>
+              Check your symptoms and get possible conditions and recommended
+              actions.
+            </p>
+          </div>
+
+          <!-- Emergency/First Aid Section -->
+          <div class="service-card" onclick="redirectTo('emergency')">
+            <div class="service-icon">
+              <i class="fas fa-first-aid"></i>
+            </div>
+            <h3>Emergency & First Aid</h3>
+            <p>
+              Critical first aid instructions and emergency procedures for
+              various situations.
+            </p>
+          </div>
+        </div>
+      </main>
     </div>
 
-    <div class="nav">
-      <div id="navbar">
-        <ul>
-          <li><a href="#">FIT</a></li>
-          <li><a href="#">STAYING HEALTHY</a></li>
-          <li><a href="cal_calc.html">CALORIES CALCULATOR</a></li>
-          <li><a href="#">DISEASE</a></li>
-          <li><a href="#">BEST SPECIALIST</a></li>
-          <li><a href="#">WOMEN’S CARE</a></li>
-          <li><a href="#">BLOOD BANK</a></li>
-          <li><a href="#">SYMPTOMS CHECKER</a></li>
-          <li><a href="#">EMERGENCY / FIRST AID</a></li>
-        </ul>
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About CuraTECH</h3>
+            <p>
+              We are committed to providing comprehensive healthcare solutions
+              to empower individuals to take control of their health and
+              wellbeing.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Services</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-section">
+            <h3>Contact Info</h3>
+            <p><i class="fas fa-map-marker-alt"></i> DAVANGERE</p>
+            <p><i class="fas fa-phone"></i> 9999999999</p>
+            <p><i class="fas fa-envelope"></i> info@CuraTECH.com</p>
+            <p><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 CuraTECH. All rights reserved. | Designed with
+            <i class="fas fa-heart" style="color: #e73c7e"></i> for your health
+          </p>
+        </div>
       </div>
-    </div>
+    </footer>
+
+    <script>
+      // Create animated particles
+      function createParticles() {
+        const particlesContainer = document.getElementById("particles");
+        const particleCount = 30;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("particle");
+
+          // Random size between 5 and 15px
+          const size = Math.random() * 10 + 5;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+
+          // Random position
+          particle.style.left = `${Math.random() * 100}vw`;
+
+          // Random animation duration between 10 and 20 seconds
+          const duration = Math.random() * 10 + 10;
+          particle.style.animationDuration = `${duration}s`;
+
+          // Random delay
+          const delay = Math.random() * 5;
+          particle.style.animationDelay = `${delay}s`;
+
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      // Redirect function for service cards
+      function redirectTo(service) {
+        let url;
+        switch (service) {
+          case "calories-calculator":
+            // Open this specific link in a new tab
+            window.open("cal_calc.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+          // You can add more cases for other services here
+          // case 'fitness':
+          //   url = 'fitness.html';
+          //   break;
+          case "womens-care":
+            // Open this specific link in a new tab
+            window.open("women.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+          case "emergency":
+            // Open this specific link in a new tab
+            window.open("firstaid.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+          case "symptoms-checker":
+            // Open this specific link in a new tab
+            window.open("sympt.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+            
+          case "fitness":
+            // Open this specific link in a new tab
+            window.open("fitness.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+            case "healthy-living":
+            // Open this specific link in a new tab
+            window.open("s_health.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+             case "diseases":
+            // Open this specific link in a new tab
+            window.open("disease_info.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+             case "medicines":
+            // Open this specific link in a new tab
+            window.open("medi_info.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+
+             case "blood-bank":
+            // Open this specific link in a new tab
+            window.open("blood.html", "_blank");
+            return; // Exit after opening the new tab
+            break;
+          default:
+            alert(
+              `The "${service.replace("-", " ")}" page is not available yet.`
+            );
+            return; // Exit the function if no URL is found
+        }
+      }
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", function () {
+        createParticles();
+      });
+    </script>
   </body>
 </html>

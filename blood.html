@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blood Bank Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #b30000;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      padding: 8px;
+      margin-top: 5px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: #b30000;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #800000;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #b30000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Blood Bank Management System</h1>
+  <div class="container">
+    <!-- Donor Registration -->
+    <h2>Register Donor</h2>
+    <form id="donorForm">
+      <label>Name: <input type="text" id="donorName" required></label>
+      <label>Phone: <input type="text" id="donorPhone" required></label>
+      <label>City: <input type="text" id="donorCity"></label>
+      <label>Blood Group:
+        <select id="donorBG" required>
+          <option value="">Select</option>
+          <option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option>
+          <option>O+</option><option>O-</option>
+        </select>
+      </label>
+      <button type="submit">Register Donor</button>
+    </form>
+
+    <!-- Inventory -->
+    <h2>Blood Inventory</h2>
+    <button onclick="loadInventory()">Refresh Inventory</button>
+    <table id="inventoryTable">
+      <thead>
+        <tr><th>Blood Group</th><th>Volume (ml)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:5000";
+
+    // Register donor
+    document.getElementById("donorForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const donor = {
+        name: document.getElementById("donorName").value,
+        phone: document.getElementById("donorPhone").value,
+        city: document.getElementById("donorCity").value,
+        blood_group: document.getElementById("donorBG").value
+      };
+      const res = await fetch(`${API_BASE}/donors`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(donor)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Donor registered successfully! ID: " + data.id);
+        e.target.reset();
+      } else {
+        alert("Error: " + data.error);
+      }
+    });
+
+    // Load inventory
+    async function loadInventory() {
+      const res = await fetch(`${API_BASE}/inventory`);
+      const data = await res.json();
+      const tbody = document.querySelector("#inventoryTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(item => {
+        const row = `<tr><td>${item.blood_group}</td><td>${item.volume_ml}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Initial load
+    loadInventory();
+  </script>
+</body>
+</html>

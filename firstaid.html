@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emergency First Aid </title>
+  <meta name="description" content="Critical first aid and emergency procedures for life-threatening situations."/>
+  <style>
+    :root {
+      --primary: #f15b5b;
+      --dark: #b71c1c;
+      --light: #ffffff;
+      --gray: #f5f5f5;
+      --text: #212121;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gray);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 2rem 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.2rem; opacity: 0.9; }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .alert {
+      background: #ffebee;
+      color: var(--dark);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: bold;
+      border-left: 6px solid var(--primary);
+    }
+
+    .accordion {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid #eee;
+    }
+    .accordion-item:last-child { border-bottom: none; }
+
+    .accordion-header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .accordion-header:hover { background: var(--dark); }
+    .accordion-header::after {
+      content: "▼";
+      font-size: 0.9rem;
+      transition: transform 0.3s;
+    }
+    .accordion-header.active::after {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      background: #fff;
+    }
+    .accordion-body.open {
+      padding: 1.5rem;
+      max-height: 2000px;
+    }
+
+    .steps {
+      counter-reset: step;
+    }
+    .steps li {
+      list-style: none;
+      margin: 1rem 0;
+      padding-left: 2.5rem;
+      position: relative;
+    }
+    .steps li::before {
+      content: counter(step);
+      counter-increment: step;
+      background: var(--primary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-weight: bold;
+    }
+
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #333;
+      color: #fff;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .accordion-header { font-size: 1.1rem; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Emergency First Aid Guide</h1>
+    <p>Critical Life-Saving Procedures • Always Call Emergency Services First</p>
+  </header>
+
+  <div class="container">
+
+    <div class="alert">
+      🚨 IN ANY LIFE-THREATENING EMERGENCY: CALL YOUR LOCAL EMERGENCY NUMBER IMMEDIATELY<br>
+      <strong> CALL 108</strong>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-item">
+        <div class="accordion-header">Person Not Breathing or No Pulse (CPR)</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Check responsiveness – shout and gently shake.</li>
+            <li>Call emergency services (or have someone call).</li>
+            <li>Open airway – tilt head back, lift chin.</li>
+            <li>Look, listen, feel for breathing (max 10 seconds).</li>
+            <li>If not breathing normally → start <strong>30 chest compressions</strong>:<br>
+                • Place heel of one hand in center of chest<br>
+                • Other hand on top, arms straight<br>
+                • Push hard and fast (100–120 per minute, ~2 inches deep)</li>
+            <li>Give <strong>2 rescue breaths</strong> (if trained and willing).<br>
+                Pinch nose, seal mouth, blow until chest rises.</li>
+            <li>Repeat 30:2 until help arrives or person starts breathing.</li>
+            <li>If AED available → turn on and follow voice prompts.</li>
+          </ol>
+          <div class="warning">⚠️ Hands-only CPR (compressions only) is effective if you're not trained in rescue breaths.</div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Choking (Conscious Adult)</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Ask: “Are you choking?” If they nod and cannot speak → act fast.</li>
+            <li>Stand behind them, arms around waist.</li>
+            <li>Make a fist with one hand, place thumb side just above navel.</li>
+            <li>Grasp fist with other hand.</li>
+            <li>Perform quick upward thrusts (Heimlich maneuver) until object is expelled or person becomes unconscious.</li>
+          </ol>
+          <div class="warning">If person becomes unconscious → lower to ground and start CPR (chest compressions may dislodge object).</div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Severe Bleeding</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Call emergency services.</li>
+            <li>Apply firm, direct pressure with clean cloth or hands.</li>
+            <li>Do NOT remove embedded objects – press around them.</li>
+            <li>If blood soaks through, add more layers and keep pressing.</li>
+            <li>If possible, raise wounded limb above heart.</li>
+            <li>If bleeding not controlled and limb involved → apply tourniquet 2–3 inches above wound (only as last resort).</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Heart Attack</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Call emergency services immediately.</li>
+            <li>Have person sit down and rest.</li>
+            <li>If they have prescribed nitroglycerin → help them take it.</li>
+            <li>If conscious and not allergic → give 325 mg aspirin to chew (if available).</li>
+            <li>Stay calm, loosen tight clothing.</li>
+            <li>Be prepared to perform CPR if they become unconscious and stop breathing.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Stroke (Act F.A.S.T.)</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li><strong>F</strong>ace – Ask person to smile. Does one side droop?</li>
+            <li><strong>A</strong>rms – Ask to raise both arms. Does one drift downward?</li>
+            <li><strong>S</strong>peech – Ask to repeat a simple phrase. Is speech slurred?</li>
+            <li><strong>T</strong>ime – If any symptom → Call emergency services NOW. Note time symptoms started.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Seizure</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Stay calm. Most seizures stop on their own.</li>
+            <li>Clear area of hard or sharp objects.</li>
+            <li>Do NOT restrain or put anything in mouth.</li>
+            <li>Cushion head with something soft.</li>
+            <li>Turn person gently onto side (recovery position) when seizure ends.</li>
+            <li>Stay with them until fully alert.</li>
+            <li>Call emergency if seizure >5 minutes, second seizure, injury, or first-time seizure.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">Burns (Severe)</div>
+        <div class="accordion-body">
+          <ol class="steps">
+            <li>Remove from heat source.</li>
+            <li>Cool burn with cool (not cold) running water for at least 20 minutes.</li>
+            <li>Remove clothing/jewelry near burn if not stuck.</li>
+            <li>Cover loosely with clean, non-stick dressing or cling film.</li>
+            <li>Do NOT use ice, creams, or break blisters.</li>
+            <li>Seek emergency care for large, deep, facial, or electrical/chemical burns.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Emergency First Aid Guide <br>
+    This site is for informational purposes only.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const body = header.nextElementSibling;
+        const isOpen = body.classList.contains('open');
+
+        // Close all others
+        document.querySelectorAll('.accordion-body').forEach(b => {
+          b.classList.remove('open');
+        });
+        document.querySelectorAll('.accordion-header').forEach(h => {
+          h.classList.remove('active');
+        });
+
+        // Toggle current
+        if (!isOpen) {
+          body.classList.add('open');
+          header.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

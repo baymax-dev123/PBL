@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>herhealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #c66cfd;
+            --tertiary: #7873f5;
+            --quaternary: #4facfe;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --light-subtle: #6c757d;
+            --dark-bg: #1a1a2e;
+            --dark-card: #16213e;
+            --dark-text: #eaeaea;
+            --dark-subtle: #a8a8a8;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            color: var(--light-text);
+            transition: var(--transition);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            --light-bg: var(--dark-bg);
+            --light-card: var(--dark-card);
+            --light-text: var(--dark-text);
+            --light-subtle: var(--dark-subtle);
+        }
+
+        /* Animated Hearts Background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.1;
+            animation: float 15s infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--tertiary));
+            color: red;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .card {
+            background: var(--light-card);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Problems Section */
+        .problems-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(198, 108, 253, 0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .problem-card:hover {
+            transform: scale(1.03);
+        }
+
+        .problem-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Doctors Section */
+        .doctors-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .doctor-card {
+            background: linear-gradient(135deg, var(--light-card), rgba(255, 107, 157, 0.05));
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .doctor-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .doctor-info {
+            padding: 1.5rem;
+        }
+
+        .doctor-name {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .doctor-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-subtle);
+            margin-bottom: 1rem;
+        }
+
+        .appointment-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .appointment-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Checkups Section */
+        .checkup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 2px solid rgba(255, 107, 157, 0.2);
+            border-radius: 10px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            align-self: flex-start;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .checkup-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .checkup-item {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(198, 108, 253, 0.05));
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Educational Content */
+        .content-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.2);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--light-subtle);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: var(--light-card);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .video-card:hover {
+            transform: scale(1.03);
+        }
+
+        .video-thumbnail {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .article-item {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(198, 108, 253, 0.05));
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .article-item:hover {
+            transform: translateX(10px);
+        }
+
+        /* Menstrual Cycle Tracker */
+        .cycle-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cycle-chart {
+            background: var(--light-card);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 2rem;
+        }
+
+        .cycle-phases {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+
+        .phase {
+            text-align: center;
+        }
+
+        .phase-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+        }
+
+        /* Health & Mood Section */
+        .mood-tracker {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+
+        .mood-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+
+        .mood-btn:hover,
+        .mood-btn.selected {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .quotes-container {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(198, 108, 253, 0.1));
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .quote-author {
+            text-align: right;
+            color: var(--light-subtle);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--light-card);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-subtle);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .doctors-container,
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mood-tracker {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Hearts Background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-heart"></i>
+                HerHealth
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#problems">Problems</a></li>
+                    <li><a href="#doctors">Doctors</a></li>
+                    <li><a href="#checkups">Checkups</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#cycle">Cycle</a></li>
+                    <li><a href="#wellness">Wellness</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Problems Section -->
+        <section id="problems" class="section">
+            <h2 class="section-title">Women's Issues in Society</h2>
+            <div class="problems-container">
+                <div class="problem-card">
+                    <h3>Gender Pay Gap</h3>
+                    <p>Women continue to earn less than men for comparable work, with the gender pay gap persisting across industries and career levels. This economic disparity affects financial independence and long-term security.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Work-Life Balance</h3>
+                    <p>Balancing career aspirations with family responsibilities remains challenging, as women often bear a disproportionate share of household and caregiving duties.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Healthcare Disparities</h3>
+                    <p>Women face unique health challenges and often encounter gender bias in medical research, diagnosis, and treatment, leading to gaps in proper healthcare.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Underrepresentation</h3>
+                    <p>Women remain underrepresented in leadership positions across politics, business, and other influential sectors, limiting diverse perspectives in decision-making.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Safety Concerns</h3>
+                    <p>Women face ongoing safety concerns in public spaces, workplaces, and even homes, affecting their freedom of movement and mental well-being.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Mental Health Stigma</h3>
+                    <p>Women experience higher rates of anxiety and depression, yet face stigma when seeking mental health support, particularly in certain cultures and communities.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctors Section -->
+        <section id="doctors" class="section">
+            <h2 class="section-title">Top Gynecologists in DAVANGERE</h2>
+            <div class="doctors-container" id="doctorsContainer">
+                <!-- Doctors will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Checkups Section -->
+        <section id="checkups" class="section">
+            <h2 class="section-title">Health Checkup Tracker</h2>
+            <div class="card">
+                <form class="checkup-form" id="checkupForm">
+                    <div class="form-group">
+                        <label for="checkupDate">Checkup Date</label>
+                        <input type="date" id="checkupDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkupType">Checkup Type</label>
+                        <input type="text" id="checkupType" placeholder="e.g., Annual checkup, Pap smear" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkupNotes">Notes</label>
+                        <textarea id="checkupNotes" rows="3" placeholder="Any observations or recommendations"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Checkup</button>
+                </form>
+                <div class="checkup-list" id="checkupList">
+                    <!-- Checkups will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Content Section -->
+        <section id="education" class="section">
+            <h2 class="section-title">Educational Resources</h2>
+            <div class="card">
+                <div class="content-tabs">
+                    <button class="tab-btn active" data-tab="videos">Videos</button>
+                    <button class="tab-btn" data-tab="articles">Articles</button>
+                </div>
+                <div class="tab-content active" id="videos">
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="video-info">
+                                <h3>Understanding Your Menstrual Cycle</h3>
+                                <p>Learn about the phases of your cycle and what's normal</p>
+                            </div>
+                        </div>
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="video-info">
+                                <h3>Breast Self-Examination Guide</h3>
+                                <p>Step-by-step instructions for monthly breast checks</p>
+                            </div>
+                        </div>
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="video-info">
+                                <h3>Nutrition for Women's Health</h3>
+                                <p>Essential nutrients and dietary tips for women</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="articles">
+                    <div class="article-list">
+                        <div class="article-item">
+                            <h3>PCOS: Symptoms, Diagnosis, and Management</h3>
+                            <p>Comprehensive guide to understanding and managing Polycystic Ovary Syndrome, a common hormonal disorder affecting women of reproductive age.</p>
+                        </div>
+                        <div class="article-item">
+                            <h3>Mental Health and Hormones: The Connection</h3>
+                            <p>Explore how hormonal fluctuations throughout the menstrual cycle and life stages can impact mental health and emotional well-being.</p>
+                        </div>
+                        <div class="article-item">
+                            <h3>Preparing for Menopause: What to Expect</h3>
+                            <p>Learn about the physical and emotional changes during perimenopause and menopause, and strategies to manage symptoms effectively.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menstrual Cycle Section -->
+        <section id="cycle" class="section">
+            <h2 class="section-title">Menstrual Cycle Tracker</h2>
+            <div class="card">
+                <form class="cycle-form" id="cycleForm">
+                    <div class="form-group">
+                        <label for="periodDate">Last Period Start Date</label>
+                        <input type="date" id="periodDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cycleLength">Average Cycle Length (days)</label>
+                        <input type="number" id="cycleLength" min="20" max="40" value="28" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Track Cycle</button>
+                </form>
+                <div class="cycle-chart">
+                    <h3>Your Cycle Overview</h3>
+                    <div class="chart-container" id="cycleChart">
+                        <!-- Chart will be dynamically generated here -->
+                    </div>
+                    <div class="cycle-phases">
+                        <div class="phase">
+                            <div class="phase-color" style="background: #ff6b9d;"></div>
+                            <p>Menstrual</p>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-color" style="background: #feca57;"></div>
+                            <p>Follicular</p>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-color" style="background: #48dbfb;"></div>
+                            <p>Ovulation</p>
+                        </div>
+                        <div class="phase">
+                            <div class="phase-color" style="background: #ff9ff3;"></div>
+                            <p>Luteal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health & Wellness Section -->
+        <section id="wellness" class="section">
+            <h2 class="section-title">Health & Wellness</h2>
+            <div class="card">
+                <h3>How are you feeling today?</h3>
+                <div class="mood-tracker">
+                    <button class="mood-btn" data-mood="happy">😊</button>
+                    <button class="mood-btn" data-mood="neutral">😐</button>
+                    <button class="mood-btn" data-mood="sad">😢</button>
+                    <button class="mood-btn" data-mood="anxious">😰</button>
+                    <button class="mood-btn" data-mood="energetic">⚡</button>
+                    <button class="mood-btn" data-mood="tired">😴</button>
+                </div>
+                <div class="quotes-container">
+                    <div class="quote" id="dailyQuote">
+                        "Your body hears everything your mind says. Stay positive!"
+                    </div>
+                    <div class="quote-author">- Unknown</div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <h3>Mental Wellness Resources</h3>
+                    <div class="article-list">
+                        <div class="article-item">
+                            <h3>5-Minute Meditation for Stress Relief</h3>
+                            <p>Quick mindfulness exercises to incorporate into your daily routine for immediate stress reduction.</p>
+                        </div>
+                        <div class="article-item">
+                            <h3>Building Resilience: A Guide for Women</h3>
+                            <p>Practical strategies to develop emotional resilience and navigate life's challenges with strength.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <p id="notificationText">Notification message</p>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div class="modal" id="appointmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Book Appointment</h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="appointmentForm">
+                <div class="form-group">
+                    <label for="patientName">Your Name</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientEmail">Email</label>
+                    <input type="email" id="patientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentDate">Preferred Date</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentTime">Preferred Time</label>
+                    <input type="time" id="appointmentTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentReason">Reason for Visit</label>
+                    <textarea id="appointmentReason" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate animated hearts
+            generateHearts();
+            
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Tab functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+            });
+            
+            // Initialize doctors
+            initializeDoctors();
+            
+            // Form submissions
+            document.getElementById('checkupForm').addEventListener('submit', addCheckup);
+            document.getElementById('cycleForm').addEventListener('submit', trackCycle);
+            document.getElementById('appointmentForm').addEventListener('submit', bookAppointment);
+            
+            // Modal functionality
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('appointmentModal').addEventListener('click', (e) => {
+                if (e.target.id === 'appointmentModal') closeModal();
+            });
+            
+            // Mood tracker
+            const moodBtns = document.querySelectorAll('.mood-btn');
+            moodBtns.forEach(btn => {
+                btn.addEventListener('click', () => trackMood(btn.dataset.mood));
+            });
+            
+            // Load saved data
+            loadCheckups();
+            loadCycleData();
+            
+            // Set today's date as default for period date
+            document.getElementById('periodDate').valueAsDate = new Date();
+            
+            // Generate daily quote
+            generateDailyQuote();
+        });
+        
+        // Generate animated hearts
+        function generateHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartCount = 15;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDelay = `${Math.random() * 15}s`;
+                heart.style.animationDuration = `${15 + Math.random() * 10}s`;
+                container.appendChild(heart);
+            }
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                if (content.id === tabName) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+        
+        // Initialize doctors
+        function initializeDoctors() {
+            const doctorsContainer = document.getElementById('doctorsContainer');
+            const doctors = [
+                {
+                    name: "Dr. Priya Damodhar",
+                    specialty: "OB/GYN",
+                    location: "Davangere Ho, Davangere",
+                    // experience: "15 years",
+                    // rating: 4.8
+                },
+                {
+                    name: "Dr. Sukla Shetty",
+                    specialty: "GYN",
+                    location: "Binny Company Road Davangere",
+                    // experience: "12 years",
+                    // rating: 4.9
+                },
+                {
+                    name: "Dr. Walmiki",
+                    specialty: "GYN",
+                    location: "J P Extension, Davangere",
+                    // experience: "18 years",
+                    // rating: 4.7
+                }
+            ];
+            
+            doctors.forEach(doctor => {
+                const doctorCard = document.createElement('div');
+                doctorCard.classList.add('doctor-card');
+                doctorCard.innerHTML = `
+                    <div class="doctor-image">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="doctor-info">
+                        <h3 class="doctor-name">${doctor.name}</h3>
+                        <p>${doctor.specialty}</p>
+                        <div class="doctor-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${doctor.location}</span>
+                        </div>
+
+                        <!--<p><i class="fas fa-briefcase"></i> ${doctor.experience} experience</p>-->
+                        <!--<p><i class="fas fa-star"></i> ${doctor.rating} rating</p>-->
+
+                        <button class="appointment-btn" data-doctor="${doctor.name}">Book Appointment</button>
+                    </div>
+                `;
+                doctorsContainer.appendChild(doctorCard);
+            });
+            
+            // Add event listeners to appointment buttons
+            document.querySelectorAll('.appointment-btn').forEach(btn => {
+                btn.addEventListener('click', () => openAppointmentModal(btn.dataset.doctor));
+            });
+        }
+        
+        // Add checkup
+        function addCheckup(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('checkupDate').value;
+            const type = document.getElementById('checkupType').value;
+            const notes = document.getElementById('checkupNotes').value;
+            
+            const checkup = {
+                date,
+                type,
+                notes,
+                id: Date.now()
+            };
+            
+            // Get existing checkups
+            let checkups = JSON.parse(localStorage.getItem('checkups')) || [];
+            checkups.push(checkup);
+            
+            // Save to localStorage
+            localStorage.setItem('checkups', JSON.stringify(checkups));
+            
+            // Reset form
+            document.getElementById('checkupForm').reset();
+            
+            // Update UI
+            loadCheckups();
+            
+            // Show notification
+            showNotification('Checkup added successfully!');
+            
+            // Schedule notification for next checkup (30 days later)
+            scheduleNotification('Health Checkup Reminder', `It's time for your next ${type} checkup!`, new Date(date).getTime() + 30 * 24 * 60 * 60 * 1000);
+        }
+        
+        // Load checkups
+        function loadCheckups() {
+            const checkupList = document.getElementById('checkupList');
+            const checkups = JSON.parse(localStorage.getItem('checkups')) || [];
+            
+            if (checkups.length === 0) {
+                checkupList.innerHTML = '<p>No checkups recorded yet.</p>';
+                return;
+            }
+            
+            checkupList.innerHTML = '';
+            checkups.forEach(checkup => {
+                const checkupItem = document.createElement('div');
+                checkupItem.classList.add('checkup-item');
+                checkupItem.innerHTML = `
+                    <div>
+                        <h4>${checkup.type}</h4>
+                        <p><i class="fas fa-calendar"></i> ${new Date(checkup.date).toLocaleDateString()}</p>
+                        <p>${checkup.notes}</p>
+                    </div>
+                    <button class="delete-btn" data-id="${checkup.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                checkupList.appendChild(checkupItem);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => deleteCheckup(btn.dataset.id));
+            });
+        }
+        
+        // Delete checkup
+        function deleteCheckup(id) {
+            let checkups = JSON.parse(localStorage.getItem('checkups')) || [];
+            checkups = checkups.filter(checkup => checkup.id != id);
+            localStorage.setItem('checkups', JSON.stringify(checkups));
+            loadCheckups();
+            showNotification('Checkup deleted');
+        }
+        
+        // Track menstrual cycle
+        function trackCycle(e) {
+            e.preventDefault();
+            
+            const periodDate = document.getElementById('periodDate').value;
+            const cycleLength = parseInt(document.getElementById('cycleLength').value);
+            
+            const cycleData = {
+                periodDate,
+                cycleLength,
+                id: Date.now()
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('cycleData', JSON.stringify(cycleData));
+            
+            // Update UI
+            updateCycleChart(periodDate, cycleLength);
+            
+            // Show notification
+            showNotification('Cycle tracked successfully!');
+            
+            // Schedule notification for next period
+            const nextPeriodDate = new Date(periodDate);
+            nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
+            scheduleNotification('Period Reminder', 'Your period is expected to start today!', nextPeriodDate.getTime());
+        }
+        
+        // Load cycle data
+        function loadCycleData() {
+            const cycleData = JSON.parse(localStorage.getItem('cycleData'));
+            if (cycleData) {
+                document.getElementById('periodDate').value = cycleData.periodDate;
+                document.getElementById('cycleLength').value = cycleData.cycleLength;
+                updateCycleChart(cycleData.periodDate, cycleData.cycleLength);
+            }
+        }
+        
+        // Update cycle chart
+        function updateCycleChart(periodDate, cycleLength) {
+            const chartContainer = document.getElementById('cycleChart');
+            chartContainer.innerHTML = '';
+            
+            // Create a simple bar chart
+            const chart = document.createElement('div');
+            chart.style.display = 'flex';
+            chart.style.height = '100%';
+            chart.style.alignItems = 'flex-end';
+            
+            // Define phases
+            const phases = [
+                { name: 'Menstrual', days: 5, color: '#ff6b9d' },
+                { name: 'Follicular', days: 7, color: '#feca57' },
+                { name: 'Ovulation', days: 3, color: '#48dbfb' },
+                { name: 'Luteal', days: cycleLength - 15, color: '#ff9ff3' }
+            ];
+            
+            phases.forEach(phase => {
+                const phaseBar = document.createElement('div');
+                phaseBar.style.flex = `${phase.days}`;
+                phaseBar.style.height = '100%';
+                phaseBar.style.backgroundColor = phase.color;
+                phaseBar.style.margin = '0 2px';
+                phaseBar.style.borderRadius = '5px 5px 0 0';
+                phaseBar.style.position = 'relative';
+                phaseBar.style.display = 'flex';
+                phaseBar.style.alignItems = 'center';
+                phaseBar.style.justifyContent = 'center';
+                
+                const phaseLabel = document.createElement('div');
+                phaseLabel.textContent = `${phase.name} (${phase.days} days)`;
+                phaseLabel.style.color = 'white';
+                phaseLabel.style.fontWeight = 'bold';
+                phaseLabel.style.textShadow = '0 0 3px rgba(0,0,0,0.5)';
+                phaseLabel.style.transform = 'rotate(-90deg)';
+                phaseLabel.style.position = 'absolute';
+                phaseLabel.style.bottom = '20px';
+                
+                phaseBar.appendChild(phaseLabel);
+                chart.appendChild(phaseBar);
+            });
+            
+            chartContainer.appendChild(chart);
+            
+            // Add next period date
+            const nextPeriodDate = new Date(periodDate);
+            nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
+            
+            const nextPeriodInfo = document.createElement('p');
+            nextPeriodInfo.textContent = `Next period expected: ${nextPeriodDate.toLocaleDateString()}`;
+            nextPeriodInfo.style.marginTop = '1rem';
+            nextPeriodInfo.style.fontWeight = 'bold';
+            nextPeriodInfo.style.color = 'var(--primary)';
+            chartContainer.appendChild(nextPeriodInfo);
+        }
+        
+        // Open appointment modal
+        function openAppointmentModal(doctorName) {
+            const modal = document.getElementById('appointmentModal');
+            modal.classList.add('active');
+            modal.dataset.doctor = doctorName;
+        }
+        
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('appointmentModal');
+            modal.classList.remove('active');
+            document.getElementById('appointmentForm').reset();
+        }
+        
+        // Book appointment
+        function bookAppointment(e) {
+            e.preventDefault();
+            
+            const doctorName = document.getElementById('appointmentModal').dataset.doctor;
+            const patientName = document.getElementById('patientName').value;
+            const email = document.getElementById('patientEmail').value;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            const reason = document.getElementById('appointmentReason').value;
+            
+            // In a real app, this would send data to a server
+            console.log('Appointment booked:', {
+                doctor: doctorName,
+                patient: patientName,
+                email,
+                date,
+                time,
+                reason
+            });
+            
+            closeModal();
+            showNotification(`Appointment booked with ${doctorName} on ${date} at ${time}`);
+        }
+        
+        // Track mood
+        function trackMood(mood) {
+            // Remove selected class from all buttons
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            document.querySelector(`[data-mood="${mood}"]`).classList.add('selected');
+            
+            // Save mood to localStorage
+            const today = new Date().toLocaleDateString();
+            const moods = JSON.parse(localStorage.getItem('moods')) || {};
+            moods[today] = mood;
+            localStorage.setItem('moods', JSON.stringify(moods));
+            
+            showNotification(`Mood tracked: ${mood}`);
+        }
+        
+        // Generate daily quote
+        function generateDailyQuote() {
+            const quotes = [
+                { text: "Your body hears everything your mind says. Stay positive!", author: "Unknown" },
+                { text: "Self-care is not selfish. You cannot serve from an empty vessel.", author: "Eleanor Brown" },
+                { text: "The strongest women are those who build up other women.", author: "Unknown" },
+                { text: "A woman is the full circle. Within her is the power to create, nurture and transform.", author: "Diane Mariechild" },
+                { text: "You are more powerful than you know; you are beautiful just as you are.", author: "Melissa Etheridge" }
+            ];
+            
+            const today = new Date().getDate();
+            const quote = quotes[today % quotes.length];
+            
+            document.getElementById('dailyQuote').textContent = `"${quote.text}"`;
+            document.querySelector('.quote-author').textContent = `- ${quote.author}`;
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Schedule notification (using browser's Notification API if available)
+        function scheduleNotification(title, body, time) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const delay = time - Date.now();
+                if (delay > 0) {
+                    setTimeout(() => {
+                        new Notification(title, { body, icon: 'https://picsum.photos/seed/herhealth/100/100.jpg' });
+                    }, delay);
+                }
+            } else if ('Notification' in window && Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        scheduleNotification(title, body, time);
+                    }
+                });
+            }
+        }
+        
+        // Request notification permission on page load
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    </script>
+</body>
+</html>
